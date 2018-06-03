@@ -8,9 +8,9 @@ export default class App extends React.Component {
 
     onPlaceNameChange = (event)  => {
         this.setState({
-            placeName:
+            placeName: ""
         });
-    }
+    };
 
   render() {
     return (
