@@ -1,13 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 
 export default class App extends React.Component {
+    state = {
+      placeName: ""
+    };
+
+    onPlaceNameChange = (event)  => {
+        this.setState({
+            placeName:
+        });
+    }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <Text>Чек</Text>
+          <TextInput
+              style = {{width: 300, borderColor: "black", borderWidth: 1}}
+              value = {this.state.placeName}
+              onChangeText = {this.onPlaceNameChange}
+              />
       </View>
     );
   }
