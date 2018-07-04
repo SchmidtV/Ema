@@ -29,6 +29,7 @@ Navigation.registerComponent("Ema.ProfileScreen", () => ProfileScreen, store, Pr
 //         title: "Home"
 //     }
 // });
+
 Navigation.startSingleScreenApp({
     screen: {
         screen: "Ema.AuthScreen",
