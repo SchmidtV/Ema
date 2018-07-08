@@ -1,30 +1,53 @@
-import React from "react";
+import React, {Component} from "react";
 import {Image, View, StyleSheet} from "react-native";
 import {Button} from "react-native";
 import {Text} from "react-native";
+import {connect} from "react-redux";
+import {deletePlace} from "../../store/actions/index";
 
-const placeDetail = props => {
 
-    return (
+class PlaceDetail extends Component {
+    constructor(props) {
+        super(props);
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
 
+    onNavigatorEvent = event => {
+        if(event.type === "NavBarButtonPress"){
+            if(event.id === "sideDrawerToggle"){
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                })
+            }
+        }
+    };
+    placeDeletedHandler = () => {
+        this.props.onDeletePlace(this.props.selectedPlace.key);
+        this.props.navigator.pop();
+    };
+
+    render() {
+        return (
             <View style={styles.container}>
                 <View>
                     <Image
-                        source={props.selectedPlace.image}
+                        source={this.props.selectedPlace.image}
                         style={styles.placeImage}
-                        resizeMode = "contain"
+                        resizeMode="contain"
                     />
-                    <Text style={styles.placeName}>{props.selectedPlace.name.toString()}</Text>
+                    <Text style={styles.placeName}>{this.props.selectedPlace.name.toString()}</Text>
                 </View>
                 <View>
                     <Button
                         title="Delete" color="red"
-                        onPress={props.onItemDeleted}
+                        onPress={this.placeDeletedHandler}
                     />
                 </View>
             </View>
-    );
-};
+        );
+    }
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -41,5 +64,9 @@ const styles = StyleSheet.create({
 
     }
 });
-
-export default placeDetail
+const mapDispatchToProps = dispatch => {
+    return {
+        onDeletePlace: (key) => dispatch(deletePlace(key))
+    };
+};
+export default connect (null, mapDispatchToProps)(PlaceDetail);
