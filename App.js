@@ -2,6 +2,7 @@ import {Navigation} from "react-native-navigation";
 import AuthScreen from "./src/screens/Auth/Auth";
 import SharePlaceScreen from "./src/screens/SharePlace/SharePlace";
 import FindPlaceScreen from "./src/screens/FindPlace/FindPlaceTab";
+import PlaceDetailScreen from "./src/screens/PlaceDetail/PlaceDetail";
 import HomeScreen from "./src/screens/HomeTab/HomeTab";
 import MapScreen from "./src/screens/MapTab/MapTab";
 import FilterScreen from "./src/screens/FilterTab/FilterTab";
@@ -21,6 +22,7 @@ Navigation.registerComponent("Ema.MapScreen", () => MapScreen, store, Provider )
 Navigation.registerComponent("Ema.FilterScreen", () => FilterScreen, store, Provider );
 Navigation.registerComponent("Ema.FavoritesScreen", () => FavoritesScreen, store, Provider );
 Navigation.registerComponent("Ema.ProfileScreen", () => ProfileScreen, store, Provider );
+Navigation.registerComponent("Ema.PlaceDetailScreen", () => PlaceDetailScreen);
 
 //start app
 // Navigation.startSingleScreenApp({

@@ -7,8 +7,18 @@ class FindPlaceScreen extends Component {
 
 
     itemSelectHandler= (key) => {
-
+        const selectedPlace =  this.props.places.find(place => {
+            return place.key === key;
+        });
+        this.props.navigator.push({
+            screen: "Ema.PlaceDetailScreen",
+            title: selectedPlace.name,
+            passProps: {
+                selectedPlace: selectedPlace
+            }
+        });
     };
+
     render () {
             return (
                 <View>
