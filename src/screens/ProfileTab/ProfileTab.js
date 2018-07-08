@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Text, View} from "react-native";
+import {Button, Text, View} from "react-native";
 
 class ProfileTab extends Component {
     constructor(props) {
@@ -16,12 +16,18 @@ class ProfileTab extends Component {
             }
         }
     };
+
+    loginCLickedHandler = () => {
+            this.props.navigator.push({
+                screen: "Ema.AuthScreen",
+                title: "Log in"
+            });
+    };
+
     render (){
         return(
             <View>
-                <Text>
-                    Home
-                </Text>
+                <Button title="Log in" onPress={this.loginCLickedHandler}/>
             </View>
         );
     };
