@@ -7,8 +7,6 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 const startTabs = () => {
     Promise.all([
         Icon.getImageSource("home", 30),
-        Icon.getImageSource("home", 30),
-        Icon.getImageSource("home", 30),
         Icon.getImageSource("location-on", 30),
         Icon.getImageSource("format-list-bulleted", 30),
         Icon.getImageSource("favorite-border", 30),
@@ -19,44 +17,14 @@ const startTabs = () => {
         Navigation.startTabBasedApp({
             tabs: [
                 {
-                    screen: "Ema.FindPlaceScreen",
-                    label: "Find Place",
-                    title: "Find Place",
+                    screen: "Ema.HomeScreen",
+                    label: "Home",
+                    title: "Home",
                     icon: sources[0],
                     navigatorButtons: {
                         leftButtons: [
                             {
-                                icon: sources[7],
-                                title: "Menu",
-                                id: "sideDrawerToggle"
-                            }
-                        ]
-                    }
-                },
-                {
-                    screen: "Ema.SharePlaceScreen",
-                    label: "Share Place",
-                    title: "Share Place",
-                    icon: sources[1],
-                    navigatorButtons: {
-                        leftButtons: [
-                            {
-                                icon: sources[7],
-                                title: "Menu",
-                                id: "sideDrawerToggle"
-                            }
-                        ]
-                    }
-                },
-                {
-                    screen: "Ema.HomeScreen",
-                    label: "Home",
-                    title: "Home",
-                    icon: sources[2],
-                    navigatorButtons: {
-                        leftButtons: [
-                            {
-                                icon: sources[7],
+                                icon: sources[5],
                                 title: "Menu",
                                 id: "sideDrawerToggle"
                             }
@@ -67,11 +35,11 @@ const startTabs = () => {
                     screen: "Ema.MapScreen",
                     label: "Map",
                     title: "Map",
-                    icon: sources[3],
+                    icon: sources[1],
                     navigatorButtons: {
                         leftButtons: [
                             {
-                                icon: sources[7],
+                                icon: sources[5],
                                 title: "Menu",
                                 id: "sideDrawerToggle"
                             }
@@ -82,11 +50,11 @@ const startTabs = () => {
                     screen: "Ema.FilterScreen",
                     label: "Filter",
                     title: "Filter",
-                    icon: sources[4],
+                    icon: sources[2],
                     navigatorButtons: {
                         leftButtons: [
                             {
-                                icon: sources[7],
+                                icon: sources[5],
                                 title: "Menu",
                                 id: "sideDrawerToggle"
                             }
@@ -97,11 +65,11 @@ const startTabs = () => {
                     screen: "Ema.FavoritesScreen",
                     label: "Favorites",
                     title: "Favorites",
-                    icon: sources[5],
+                    icon: sources[3],
                     navigatorButtons: {
                         leftButtons: [
                             {
-                                icon: sources[7],
+                                icon: sources[5],
                                 title: "Menu",
                                 id: "sideDrawerToggle"
                             }
@@ -112,11 +80,11 @@ const startTabs = () => {
                     screen: "Ema.ProfileScreen",
                     label: "Profile",
                     title: "Profile",
-                    icon: sources[6],
+                    icon: sources[4],
                     navigatorButtons: {
                         leftButtons: [
                             {
-                                icon: sources[7],
+                                icon: sources[5],
                                 title: "Menu",
                                 id: "sideDrawerToggle"
                             }

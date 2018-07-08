@@ -17,8 +17,8 @@ const store = configureStore();
 
 //register screens
 Navigation.registerComponent("Ema.AuthScreen", () => AuthScreen, store, Provider);
-Navigation.registerComponent("Ema.SharePlaceScreen", () => SharePlaceScreen, store, Provider );
-Navigation.registerComponent("Ema.FindPlaceScreen", () => FindPlaceScreen, store, Provider );
+// Navigation.registerComponent("Ema.SharePlaceScreen", () => SharePlaceScreen, store, Provider );
+// Navigation.registerComponent("Ema.FindPlaceScreen", () => FindPlaceScreen, store, Provider );
 Navigation.registerComponent("Ema.HomeScreen", () => HomeScreen, store, Provider );
 Navigation.registerComponent("Ema.MapScreen", () => MapScreen, store, Provider );
 Navigation.registerComponent("Ema.FilterScreen", () => FilterScreen, store, Provider );

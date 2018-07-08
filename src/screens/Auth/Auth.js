@@ -8,6 +8,7 @@ class AuthScreen extends Component {
     loginHandler = () => {
         startMainTabs();
     };
+
     render () {
         startMainTabs();
         return (
