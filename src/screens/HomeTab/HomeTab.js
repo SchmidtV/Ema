@@ -1,22 +1,42 @@
 import React, {Component} from "react";
-import {Button, Text, View} from "react-native";
+import {Button, Text, TextInput, View} from "react-native";
 import {connect} from "react-redux";
 import PlaceList from "../../components/PlaceList/PlaceList";
 import {addPlace} from "../../store/actions";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import DatePicker from 'react-native-datepicker';
+import MaterialTabs from 'react-native-material-tabs';
 
 class HomeTab extends Component {
+  url = "";
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     this.state = {
       datetime: '2016-05-05 20:00',
       latitude: null,
-      longitude: null
-
+      longitude: null,
+      selectedTab: 0,
+      topEvents: []
     };
   }
+
+  fetchTopEvents = () => {
+    fetch(this.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }).then((res) => {
+      if (res.ok) {
+        console.log(res);
+        //TODO display result
+      }
+    }, function (e) {
+      console.log("Error!" + e);
+    });
+  };
 
   onNavigatorEvent = event => {
     if (event.type === "NavBarButtonPress") {
@@ -29,11 +49,10 @@ class HomeTab extends Component {
   };
 
   fetchEventByLocation = () => {
-    const url = "";
     let body = {
       location: [""]
     };
-    fetch(url, {
+    fetch(this.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -87,6 +106,7 @@ class HomeTab extends Component {
            latitude: position.coords.latitude,
            longitude: position.coords.longitude,
            error: null,
+           selectedTab: 1
          });
          //TODO do something here
          console.log("Lat: " + this.state.latitude +" Lon: " + this.state.longitude);
@@ -101,6 +121,53 @@ class HomeTab extends Component {
     console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
   };
+
+  tabRenderer(){
+    switch (this.state.selectedTab){
+      case 0:
+        return (
+          <View>
+            <Text>Added places</Text>
+            <PlaceList
+              places={this.props.places}
+              onItemSelected={this.itemSelectHandler}
+            />
+          </View>
+        );
+      case 1:
+        return (
+          <View>
+            <Text>
+              Coming soon
+            </Text>
+          </View>
+        );
+        case 2:
+        return (
+          <View>
+            <Text>
+              Coming not very soon
+            </Text>
+          </View>
+        );
+        case 3:
+        return (
+          <View>
+            <Text>
+               not Coming
+            </Text>
+          </View>
+        );
+      default:
+        return (
+          <PlaceList
+            places={this.props.places}
+            onItemSelected={this.itemSelectHandler}
+          />
+        );
+    }
+  };
+
   render() {
     return (
       <View>
@@ -130,11 +197,15 @@ class HomeTab extends Component {
           onDateChange={(datetime) => {this.setState({datetime: datetime});}}
         />
         <Text onPress={this.nowPressedHandler}>Now</Text>
-        <Button title="Special" onPress={this.dontTouchMyButton}/>
-        <PlaceList
-          places={this.props.places}
-          onItemSelected={this.itemSelectHandler}
+        <TextInput placeholder="Google Map Placeholder"/>
+        <MaterialTabs
+          items={['For you', 'Soon', 'Best', "Near Me"]}
+          selectedIndex={this.state.selectedTab}
+          onChange={index => this.setState({ selectedTab: index })}
         />
+        {this.tabRenderer()}
+        <Button title="Special button for special person" onPress={this.dontTouchMyButton}/>
+
       </View>
     );
   }
