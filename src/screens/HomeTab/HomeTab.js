@@ -109,7 +109,8 @@ class HomeTab extends Component {
            selectedTab: 1
          });
          //TODO do something here
-         console.log("Lat: " + this.state.latitude +" Lon: " + this.state.longitude);
+         // console.log("Lat: " + this.state.latitude +" Lon: " + this.state.longitude);
+         this.fetchWEather();
        })
        .catch((err) => {
          console.error(err.message);
@@ -118,10 +119,30 @@ class HomeTab extends Component {
 
   //TODO DELETE
   dontTouchMyButton =() => {
+
     console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    this.getCurrentPosition();
 
   };
 
+  fetchWEather = () => {
+    const url = "http://pc18.beuth-hochschule.de/php/Stud/Rudi/weather/wetter.php";
+    const body = {};
+    fetch(url + "?lat="+this.state.latitude+"?lon=" +this.state.longitude+"&mode=forecast", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }).then((res) => {
+      if (res.ok) {
+        console.log(res.json());
+        //TODO display result
+      }
+    }, function (e) {
+      console.log("Error!" + e);
+    });
+  };
   tabRenderer(){
     switch (this.state.selectedTab){
       case 0:

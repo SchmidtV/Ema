@@ -4,6 +4,7 @@ import {Button} from "react-native";
 import {Text} from "react-native";
 import {connect} from "react-redux";
 import {deletePlace} from "../../store/actions/index";
+import WeatherItem from "../../components/WeatherItem";
 
 
 class PlaceDetail extends Component {
@@ -37,6 +38,7 @@ class PlaceDetail extends Component {
                     />
                     <Text style={styles.placeName}>{this.props.selectedPlace.name.toString()}</Text>
                 </View>
+                <WeatherItem date={false}/>
                 <View>
                     <Button
                         title="Delete" color="red"
