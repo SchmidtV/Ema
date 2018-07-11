@@ -6,6 +6,7 @@ import {addPlace} from "../../store/actions";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import DatePicker from 'react-native-datepicker';
 import MaterialTabs from 'react-native-material-tabs';
+import WeatherItem from "../../components/WeatherItem";
 
 class HomeTab extends Component {
   url = "";
@@ -128,7 +129,7 @@ class HomeTab extends Component {
   fetchWEather = () => {
     const url = "http://pc18.beuth-hochschule.de/php/Stud/Rudi/weather/wetter.php";
     const body = {};
-    fetch(url + "?lat="+this.state.latitude+"?lon=" +this.state.longitude+"&mode=forecast", {
+    fetch(url + "?lat="+this.state.latitude+"&lon=" +this.state.longitude+"&mode=forecast", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -226,7 +227,7 @@ class HomeTab extends Component {
         />
         {this.tabRenderer()}
         <Button title="Special button for special person" onPress={this.dontTouchMyButton}/>
-
+        <WeatherItem date={null} latitude={40} longitude={-14}/>
       </View>
     );
   }
