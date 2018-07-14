@@ -22,52 +22,36 @@ class WeatherItem extends Component {
 
   fetchWeather = () => {
     let url = "http://pc18.beuth-hochschule.de/php/Stud/Rudi/weather/wetter.php?mode=forcast";
-    if(this.props.place){
+     if(this.props.eventInfo.event_lat && this.props.eventInfo.event_lon){
+      url = url + "&lat="+this.props.eventInfo.event_lat+"&lon=" +this.props.eventInfo.event_lon;
+    }else if(this.props.place){
+       console.log("Got no lon lat for current event");
       url = url + "&q=" + this.props.place;
-    }else if(this.props.latitude && this.props.longitude){
-      url = url + "&lat="+this.props.latitude+"&lon=" +this.props.longitude;
     }else {
       console.log("Need place name or lat & lon to fetch!");
       return;
     }
-    if(this.props.date) {
-      url = url + "&date=" + this.props.date;
+    if(this.props.eventInfo.event_date) {
+      url = url + "&date=" + this.props.eventInfo.event_date.slice(0, 16);
       console.log("Using date");
     }
 
-    //JUST in case we need a body
-    // const body = {};
-    // console.log("fetching url: " + url);
-    // fetch(url, {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   // body: JSON.stringify(body)
-    // }).then((res) => {
-    //   if (res.ok) {
-    //     let data = res.json();
-    //     console.log(data);
-    //     //TODO display result
-    //   }
-    // }, function (e) {
-    //   console.log("Error!" + e);
-    // });
-    that = this;
-    window.fetch(url, this)
+    console.log("WEather url: " + url);
+
+    fetch(url)
       .then((response) =>{
         return response.json();
       })
-      .then(function(myJson) {
+      .then((myJson) => {
         // console.log(myJson.weather);
-        that.setState({
-          error: myJson.error,
-          date: myJson.weather.date,
-          city: myJson.weather.city,
-          country: myJson.weather.country,
+        this.setState({
+          // error: myJson.error,
+          // date: myJson.weather.date,
+          // city: myJson.weather.city,
+          // country: myJson.weather.country,
           temp_min: myJson.weather.temp_min,
           temp_max: myJson.weather.temp_max,
-          description: myJson.weather.description,
+          // description: myJson.weather.description,
           icon: myJson.weather.icon
         });
       });
@@ -75,17 +59,17 @@ class WeatherItem extends Component {
 
   render() {
     const display = [];
-    if (this.state.date) {
-      display.push(
-        <Text key ="date" >Date: {this.state.date}</Text>
-      );
-    }
-
-    if (this.state.city) {
-      display.push(
-        <Text key ="loc">Location: {this.state.city}</Text>
-      );
-    }
+    // if (this.state.date) {
+    //   display.push(
+    //     <Text key ="date" >Date: {this.state.date}</Text>
+    //   );
+    // }
+    //
+    // if (this.state.city) {
+    //   display.push(
+    //     <Text key ="loc">Location: {this.state.city}</Text>
+    //   );
+    // }
 
     if (this.state.temp_min && this.state.temp_max) {
       display.push(
@@ -105,7 +89,7 @@ class WeatherItem extends Component {
 
 
     return (
-      <View>
+      <View style={{flexDirection: "column", alignItems: "center"}}>
         {display}
       </View>
     );
@@ -116,7 +100,7 @@ const styles = StyleSheet.create({
 
   weatherImage:  {
     width: "100%",
-    height: 40
+    height: 30
   }
 });
 

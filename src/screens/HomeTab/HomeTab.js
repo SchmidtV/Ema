@@ -255,7 +255,7 @@ class HomeTab extends Component {
           />
         </View>
         <Button title="Special button for special person" onPress={this.dontTouchMyButton}/>
-        <WeatherItem date={null} latitude={40} longitude={-14}/>
+
 
       </View>
     );

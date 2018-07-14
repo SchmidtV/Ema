@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, TextInput, View, StyleSheet, Image, Text, TouchableOpacity} from "react-native";
 import StarRating from 'react-native-star-rating';
-import img from "../assets/NoImgArt.png"
+import WeatherItem from "./WeatherItem";
 
 class EventDescriptionSmall extends Component {
   constructor(props) {
@@ -24,11 +24,12 @@ class EventDescriptionSmall extends Component {
             source={imgUrl}
             style={styles.placeImage}
           />
-          <View>
-            <Text>{this.props.eventInfo.event_category_id}</Text>
-            <Text>{this.props.eventInfo.event_title}</Text>
-            <Text>{this.props.eventInfo.event_price}</Text>
-
+            <View style={{flexDirection: "column", width: "50%"}}>
+              <Text>{this.props.eventInfo.event_category_id}</Text>
+              <Text>{this.props.eventInfo.event_title}</Text>
+              <Text>{this.props.eventInfo.event_price}</Text>
+            </View>
+            <WeatherItem eventInfo = {this.props.eventInfo}/>
             {/*<Text>{props.placeTime}</Text>*/}
             {/*<View style={{flex: 1, flexDirection: "row"}}>*/}
             {/*<StarRating*/}
@@ -40,7 +41,6 @@ class EventDescriptionSmall extends Component {
             {/*/>*/}
             {/*<Text>{props.placeRating}</Text>*/}
             {/*</View>*/}
-          </View>
         </View>
       </TouchableOpacity>
     );
