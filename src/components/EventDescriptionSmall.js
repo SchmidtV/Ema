@@ -18,7 +18,7 @@ class EventDescriptionSmall extends Component {
 
     return (
       <TouchableOpacity onPress={this.props.onItemPressed}>
-        <View style={{flex: 1, borderWidth: 1, borderColor: '#000000', flexDirection: "row"}}>
+        <View style={{flex: 1, flexDirection: "row"}}>
           <Image
             resizeMode="contain"
             source={imgUrl}

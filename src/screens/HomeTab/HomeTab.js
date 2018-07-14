@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Button, Text, TextInput, View} from "react-native";
 import {connect} from "react-redux";
-import PlaceList from "../../components/PlaceList/PlaceList";
 import {addPlace} from "../../store/actions";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import DatePicker from 'react-native-datepicker';
@@ -176,10 +175,7 @@ class HomeTab extends Component {
               baseUrl = {this.state.baseUrl}
               onItemSelected={this.itemSelectHandler}
             />
-            {/*<PlaceList*/}
-              {/*places={this.props.places}*/}
-              {/*onItemSelected={this.itemSelectHandler}*/}
-            {/*/>*/}
+
           </View>
         );
       case 1:
@@ -251,7 +247,13 @@ class HomeTab extends Component {
           selectedIndex={this.state.selectedTab}
           onChange={index => this.setState({ selectedTab: index })}
         />
-        {this.tabRenderer()}
+        <View>
+          <Text>Added places</Text>
+          <EventsList
+            baseUrl = {this.state.baseUrl}
+            onItemSelected={this.itemSelectHandler}
+          />
+        </View>
         <Button title="Special button for special person" onPress={this.dontTouchMyButton}/>
         <WeatherItem date={null} latitude={40} longitude={-14}/>
 

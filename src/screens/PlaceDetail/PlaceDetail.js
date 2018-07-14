@@ -23,27 +23,28 @@ class PlaceDetail extends Component {
         }
     };
     placeDeletedHandler = () => {
-        this.props.onDeletePlace(this.props.selectedPlace.key);
+        this.props.onDeletePlace(this.props.selectedPlace.t_event_id);
         this.props.navigator.pop();
     };
 
     render() {
+
+      let imgUrl = null;
+      if (this.props.selectedPlace.event_imgurl) {
+        imgUrl = {uri: this.props.selectedPlace.event_imgurl};
+      } else {
+        imgUrl = require("../../assets/NoImgArt.png");
+      }
+
         return (
             <View style={styles.container}>
                 <View>
                     <Image
-                        source={this.props.selectedPlace.image}
+                        source={imgUrl}
                         style={styles.placeImage}
                         resizeMode="contain"
                     />
-                    <Text style={styles.placeName}>{this.props.selectedPlace.name.toString()}</Text>
-                </View>
-
-                <View>
-                    <Button
-                        title="Delete" color="red"
-                        onPress={this.placeDeletedHandler}
-                    />
+                    <Text style={styles.placeName}>{this.props.selectedPlace.event_title}</Text>
                 </View>
             </View>
         );
