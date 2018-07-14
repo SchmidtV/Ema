@@ -7,36 +7,53 @@ import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import DatePicker from 'react-native-datepicker';
 import MaterialTabs from 'react-native-material-tabs';
 import WeatherItem from "../../components/WeatherItem";
+import EventsList from "../../components/EventsList/EventsList";
 
 class HomeTab extends Component {
-  url = "";
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     this.state = {
+      baseUrl: "http://pc18.beuth-hochschule.de/php/Stud/Rudi/",
       datetime: '2016-05-05 20:00',
       latitude: null,
       longitude: null,
-      selectedTab: 0,
-      topEvents: []
+      selectedTab: 0
     };
+    // this.fetchTopEvents();
   }
 
   fetchTopEvents = () => {
-    fetch(this.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    }).then((res) => {
-      if (res.ok) {
-        console.log(res);
-        //TODO display result
-      }
-    }, function (e) {
-      console.log("Error!" + e);
-    });
+    // // console.log(this.state.events);
+    // const url = this.state.baseUrl +"events/get_events.php?lim=30";
+    //
+    // that = this;
+    // window.fetch(url, this)
+    //   .then((response) =>{
+    //     return response.json();
+    //   })
+    //   .then(function(myJson) {
+    //     // console.log(myJson.events);
+    //     that.setState({
+    //       topEvents: myJson.events
+    //     });
+    //   });
+
+    // console.log(this.state.events);
+    // fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify(body)
+    // }).then((res) => {
+    //   if (res.ok) {
+    //     console.log(res);
+    //     //TODO display result
+    //   }
+    // }, function (e) {
+    //   console.log("Error!" + e);
+    // });
   };
 
   onNavigatorEvent = event => {
@@ -69,15 +86,18 @@ class HomeTab extends Component {
     });
   };
 
-  itemSelectHandler = (key) => {
-    const selectedPlace = this.props.places.find(place => {
-      return place.key === key;
-    });
+  itemSelectHandler = (event) => {
+    // const selectedEvent = this.state.topEvents.find(event => {
+    //   return event.event_title === key;
+    // });
+
+    // console.log("Key: " + key);
+    // console.log("First event title: " + this.state.topEvents[0].event_title);
     this.props.navigator.push({
       screen: "Ema.PlaceDetailScreen",
-      title: selectedPlace.name,
+      title: event.event_title,
       passProps: {
-        selectedPlace: selectedPlace
+        selectedPlace: event
       }
     });
   };
@@ -122,8 +142,9 @@ class HomeTab extends Component {
   dontTouchMyButton =() => {
 
     console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    this.getCurrentPosition();
-
+    // this.getCurrentPosition();
+    // console.log(this.state.baseUrl);
+    // this.fetchTopEvents();
   };
 
   fetchWEather = () => {
@@ -137,7 +158,7 @@ class HomeTab extends Component {
       body: JSON.stringify(body)
     }).then((res) => {
       if (res.ok) {
-        console.log(res.json());
+        // console.log(res.json());
         //TODO display result
       }
     }, function (e) {
@@ -145,15 +166,20 @@ class HomeTab extends Component {
     });
   };
   tabRenderer(){
+
     switch (this.state.selectedTab){
       case 0:
         return (
           <View>
             <Text>Added places</Text>
-            <PlaceList
-              places={this.props.places}
+            <EventsList
+              baseUrl = {this.state.baseUrl}
               onItemSelected={this.itemSelectHandler}
             />
+            {/*<PlaceList*/}
+              {/*places={this.props.places}*/}
+              {/*onItemSelected={this.itemSelectHandler}*/}
+            {/*/>*/}
           </View>
         );
       case 1:
@@ -228,6 +254,7 @@ class HomeTab extends Component {
         {this.tabRenderer()}
         <Button title="Special button for special person" onPress={this.dontTouchMyButton}/>
         <WeatherItem date={null} latitude={40} longitude={-14}/>
+
       </View>
     );
   }

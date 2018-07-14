@@ -16,7 +16,7 @@ class WeatherItem extends Component {
       description: null,
       icon: null
     };
-    console.log("fetching data");
+    // console.log("fetching data");
     this.fetchWeather();
   }
 
@@ -37,7 +37,7 @@ class WeatherItem extends Component {
 
     //JUST in case we need a body
     // const body = {};
-    console.log("fetching url: " + url);
+    // console.log("fetching url: " + url);
     // fetch(url, {
     //   method: "GET",
     //   headers: {
@@ -59,7 +59,7 @@ class WeatherItem extends Component {
         return response.json();
       })
       .then(function(myJson) {
-        console.log(myJson.weather);
+        // console.log(myJson.weather);
         that.setState({
           error: myJson.error,
           date: myJson.weather.date,
