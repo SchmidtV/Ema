@@ -85,13 +85,13 @@ class FilterTab extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <Picker
-          selectedValue={this.state.catMode}
-          style={{height: 50, width: 100}}
-          onValueChange={(itemValue, itemIndex) => this.setState({catMode: itemValue})}>
-          <Picker.Item label="AND" value="and"/>
-          <Picker.Item label="OR" value="or"/>
-        </Picker>
+        {/*<Picker*/}
+          {/*selectedValue={this.state.catMode}*/}
+          {/*style={{height: 50, width: 100}}*/}
+          {/*onValueChange={(itemValue, itemIndex) => this.setState({catMode: itemValue})}>*/}
+          {/*<Picker.Item label="AND" value="and"/>*/}
+          {/*<Picker.Item label="OR" value="or"/>*/}
+        {/*</Picker>*/}
         <View style={styles.checkBoxList}>
           {checks}
         </View>

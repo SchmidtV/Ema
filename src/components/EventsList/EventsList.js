@@ -9,20 +9,72 @@ class EventsList extends Component {
     this.state = {
       events: []
     };
-    this.fetchTopEvents();
+
+    this.getCurrentPosition();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("props changed");
+    this.fetchEvents(nextProps);
   }
 
 
-  fetchTopEvents = () => {
-    // console.log(this.state.events);
-    const url = this.props.baseUrl + "events/get_events.php?lim=30";
+  getPosition = function (options) {
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    });
+  };
 
+  getCurrentPosition = () => {
+    this.getPosition()
+      .then((position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+        this.fetchEvents();
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+  };
+
+  fetchEvents = (curProps = this.props) => {
+    let url = curProps.baseUrl + "events/get_events.php";
+    if(curProps.limit){
+      url= url + "?lim=" + curProps.limit;
+    }else{
+      url= url + "?lim=30";
+    }
+
+    if(curProps.longitude && curProps.longitude){
+      url = url + "&lon="+curProps.longitude+"&lat=" +curProps.latitude;
+    }else{
+      return;
+    }
+
+    if(curProps.longitude && curProps.longitude){
+      url = url + "&lon="+curProps.longitude+"&lat=" +curProps.latitude;
+    }
+
+    if(curProps.fromDate){
+      url = url + "&fromdate="+ curProps.fromDate;
+    }
+
+    if(curProps.toDate){
+      url = url + "&todate="+ curProps.toDate;
+    }
+
+    if(curProps.categories){
+      url = url + "&category="+ curProps.categories;
+    }
+
+    console.log("Fetching events: " + url);
     fetch(url, this)
       .then((response) => {
         return response.json();
       })
       .then( (myJson) => {
-        console.log("fetched: " + myJson.events.length);
         this.setState({
           events: myJson.events
         });
@@ -32,7 +84,6 @@ class EventsList extends Component {
   };
 
   render() {
-    console.log("Render called!");
     return (
       <FlatList
         style={styles.listContainer}

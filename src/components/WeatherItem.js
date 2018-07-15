@@ -33,10 +33,9 @@ class WeatherItem extends Component {
     }
     if(this.props.eventInfo.event_date) {
       url = url + "&date=" + this.props.eventInfo.event_date.slice(0, 16);
-      console.log("Using date");
     }
 
-    console.log("WEather url: " + url);
+    // console.log("WEather url: " + url);
 
     fetch(url)
       .then((response) =>{

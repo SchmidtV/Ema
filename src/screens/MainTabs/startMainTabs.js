@@ -2,105 +2,104 @@ import {Navigation} from "react-native-navigation";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 
-
-
 const startTabs = () => {
-    Promise.all([
-        Icon.getImageSource("home", 30),
-        Icon.getImageSource("location-on", 30),
-        Icon.getImageSource("format-list-bulleted", 30),
-        Icon.getImageSource("favorite-border", 30),
-        Icon.getImageSource("perm-identity", 30),
-        Icon.getImageSource("menu", 30),
+  Promise.all([
+    Icon.getImageSource("home", 30),
+    Icon.getImageSource("location-on", 30),
+    Icon.getImageSource("format-list-bulleted", 30),
+    Icon.getImageSource("favorite-border", 30),
+    Icon.getImageSource("perm-identity", 30),
+    Icon.getImageSource("menu", 30),
 
-    ]).then(sources => {
-        Navigation.startTabBasedApp({
-            tabs: [
-                {
-                    screen: "Ema.HomeScreen",
-                    label: "Home",
-                    title: "Home",
-                    icon: sources[0],
-                    navigatorButtons: {
-                        leftButtons: [
-                            {
-                                icon: sources[5],
-                                title: "Menu",
-                                id: "sideDrawerToggle"
-                            }
-                        ]
-                    }
-                },
-                {
-                    screen: "Ema.MapScreen",
-                    label: "Map",
-                    title: "Map",
-                    icon: sources[1],
-                    navigatorButtons: {
-                        leftButtons: [
-                            {
-                                icon: sources[5],
-                                title: "Menu",
-                                id: "sideDrawerToggle"
-                            }
-                        ]
-                    }
-                },
-                {
-                    screen: "Ema.FilterScreen",
-                    label: "Filter",
-                    title: "Filter",
-                    icon: sources[2],
-                    navigatorButtons: {
-                        leftButtons: [
-                            {
-                                icon: sources[5],
-                                title: "Menu",
-                                id: "sideDrawerToggle"
-                            }
-                        ]
-                    }
-                },
-                {
-                    screen: "Ema.FavoritesScreen",
-                    label: "Favorites",
-                    title: "Favorites",
-                    icon: sources[3],
-                    navigatorButtons: {
-                        leftButtons: [
-                            {
-                                icon: sources[5],
-                                title: "Menu",
-                                id: "sideDrawerToggle"
-                            }
-                        ]
-                    }
-                },
-                {
-                    screen: "Ema.ProfileScreen",
-                    label: "Profile",
-                    title: "Profile",
-                    icon: sources[4],
-                    navigatorButtons: {
-                        leftButtons: [
-                            {
-                                icon: sources[5],
-                                title: "Menu",
-                                id: "sideDrawerToggle"
-                            }
-                        ]
-                    }
-                }
+  ]).then(sources => {
+    Navigation.startTabBasedApp({
+      tabs: [
+        {
+          screen: "Ema.HomeScreen",
+          label: "Home",
+          title: "Home",
+          icon: sources[0]
+          // ,navigatorButtons: {
+          //     leftButtons: [
+          //         {
+          //             icon: sources[5],
+          //             title: "Menu",
+          //             id: "sideDrawerToggle"
+          //         }
+          //     ]
+          // }
+        },
+        {
+          screen: "Ema.MapScreen",
+          label: "Map",
+          title: "Map",
+          icon: sources[1]
+          // ,navigatorButtons: {
+          //     leftButtons: [
+          //         {
+          //             icon: sources[5],
+          //             title: "Menu",
+          //             id: "sideDrawerToggle"
+          //         }
+          //     ]
+          // }
+        },
+        {
+          screen: "Ema.FilterScreen",
+          label: "Filter",
+          title: "Filter",
+          icon: sources[2],
+          // ,navigatorButtons: {
+          //     leftButtons: [
+          //         {
+          //             icon: sources[5],
+          //             title: "Menu",
+          //             id: "sideDrawerToggle"
+          //         }
+          //     ]
+          // }
+        },
+        {
+          screen: "Ema.FavoritesScreen",
+          label: "Favorites",
+          title: "Favorites",
+          icon: sources[3]
+          // ,navigatorButtons: {
+          //       leftButtons: [
+          //           {
+          //               icon: sources[5],
+          //               title: "Menu",
+          //               id: "sideDrawerToggle"
+          //           }
+          //       ]
+          //   }
+        },
+        {
+          screen: "Ema.ProfileScreen",
+          label: "Profile",
+          title: "Profile",
+          icon: sources[4]
+          // ,navigatorButtons: {
+          //       leftButtons: [
+          //           {
+          //               icon: sources[5],
+          //               title: "Menu",
+          //               id: "sideDrawerToggle"
+          //           }
+          //       ]
+          //   }
+        }
 
 
-            ],
-            drawer: {
-                left: {
-                    screen: "Ema.SideDrawer"
-                }
-            }
-        });
+      ]
+      ,
+      drawer: {
+        left: {
+          screen: "Ema.SideDrawer"
+        }
+      }
     });
+  });
 
 
 };

@@ -22,7 +22,7 @@
       </activity>
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="Your Google maps API Key Here"/>
+                android:value="AIzaSyATMZ-azXe_fek4rjnXRq0pRrXKlNJAjbs"/>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
 
