@@ -1,6 +1,8 @@
 import React, {Component} from "react";
-import {CheckBox, Picker, StyleSheet, Text, View} from "react-native";
+import {CheckBox, Picker, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import ExpandablePanel from "../../components/ExpandablePanel";
+
 
 class FilterTab extends Component {
   constructor(props) {
@@ -12,16 +14,37 @@ class FilterTab extends Component {
       latitude: 0,
       longitude: 0,
       catData: [
-        {id: "music", selected: false},
-        {id: "conference", selected: true},
-        {id: "comedy", selected: true},
-        {id: "learning_education", selected: false},
-        {id: "family_fun_kids", selected: false},
-        {id: "festivals_parades", selected: false},
-        {id: "movies_film", selected: false},
-        {id: "food", selected: false},
-        {id: "fundraisers", selected: false}
-      ]
+        {id: 1, name: "music", selected: false},
+        {id: 2, name: "conference", selected: false},
+        {id: 3, name: "comedy", selected: false},
+        {id: 4, name: "learning_education", selected: false},
+        {id: 5, name: "family_fun_kids", selected: false},
+        {id: 6, name: "festivals_parades", selected: false},
+        {id: 7, name: "movies_film", selected: false},
+        {id: 8, name: "food", selected: false},
+        {id: 9, name: "fundraisers", selected: false},
+        {id: 10, name: "art", selected: false},
+        {id: 11, name: "support", selected: false},
+        {id: 12, name: "holiday", selected: false},
+        {id: 13, name: "books", selected: false},
+        {id: 14, name: "attractions", selected: false},
+        {id: 15, name: "community", selected: false},
+        {id: 16, name: "business", selected: false},
+        {id: 17, name: "singles_social", selected: false},
+        {id: 18, name: "schools_alumni", selected: false},
+        {id: 19, name: "clubs_associations", selected: false},
+        {id: 20, name: "outdoors_recreation", selected: false},
+        {id: 21, name: "performing_arts", selected: false},
+        {id: 22, name: "animals", selected: false},
+        {id: 23, name: "politics_activism", selected: false},
+        {id: 24, name: "sales", selected: false},
+        {id: 25, name: "science", selected: false},
+        {id: 26, name: "religion_spirituality", selected: false},
+        {id: 27, name: "sports", selected: false},
+        {id: 28, name: "technology", selected: false},
+        {id: 29, name: "other", selected: false}
+      ],
+      open: false
     }
   }
 
@@ -73,18 +96,30 @@ class FilterTab extends Component {
     const checks = this.state.catData.map((d) => {
       return (
         <View key={d.id} style={styles.checkBoxEntity}>
+
           <CheckBox
             data-id={d.id}
             value={d.selected}
             onChange={this.changeSelection.bind(this, d.id)}
           />
-          <Text>{d.id} </Text>
+          <Text>{d.name} </Text>
         </View>
       );
     });
 
     return (
       <View style={{flex: 1}}>
+        <ScrollView style={styles.container}>
+          <ExpandablePanel title="A Panel with short content text">
+            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+          </ExpandablePanel>
+          <ExpandablePanel title="A Panel with long content text">
+            <Text>Lorem ipsum...</Text>
+          </ExpandablePanel>
+          <ExpandablePanel title="Another Panel">
+            <Text>Lorem ipsum dolor sit amet...</Text>
+          </ExpandablePanel>
+        </ScrollView>
         {/*<Picker*/}
           {/*selectedValue={this.state.catMode}*/}
           {/*style={{height: 50, width: 100}}*/}
@@ -92,9 +127,11 @@ class FilterTab extends Component {
           {/*<Picker.Item label="AND" value="and"/>*/}
           {/*<Picker.Item label="OR" value="or"/>*/}
         {/*</Picker>*/}
-        <View style={styles.checkBoxList}>
-          {checks}
-        </View>
+
+
+        {/*<View style={styles.checkBoxList}>*/}
+          {/**/}
+        {/*</View>*/}
         <View style={{flexDirection: "row", alignItems: "center"}}>
           <Text>Price:</Text>
           <Picker
@@ -133,6 +170,11 @@ const styles = StyleSheet.create({
     width: "50%",
     height: 30,
     alignItems: "center"
+  },
+  container: {
+    flex            : 1,
+    backgroundColor : '#f4f7f9',
+    paddingTop      : 30
   }
 });
 
