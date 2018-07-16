@@ -9,35 +9,13 @@ class EventsList extends Component {
     this.state = {
       events: []
     };
-
-    this.getCurrentPosition();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("props changed");
+    // console.log("props changed");
     this.fetchEvents(nextProps);
   }
 
-
-  getPosition = function (options) {
-    return new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, reject, options);
-    });
-  };
-
-  getCurrentPosition = () => {
-    this.getPosition()
-      .then((position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-        this.fetchEvents();
-      })
-      .catch((err) => {
-        console.error(err.message);
-      });
-  };
 
   fetchEvents = (curProps = this.props) => {
     let url = curProps.baseUrl + "events/get_events.php";
@@ -51,10 +29,6 @@ class EventsList extends Component {
       url = url + "&lon="+curProps.longitude+"&lat=" +curProps.latitude;
     }else{
       return;
-    }
-
-    if(curProps.longitude && curProps.longitude){
-      url = url + "&lon="+curProps.longitude+"&lat=" +curProps.latitude;
     }
 
     if(curProps.fromDate){

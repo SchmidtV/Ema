@@ -131,10 +131,16 @@ class HomeTab extends Component {
         });
         //TODO do something here
         // console.log("Lat: " + this.state.latitude +" Lon: " + this.state.longitude);
-        this.fetchWEather();
-      })
+        // this.fetchWEather();
+      },
+        {
+          enableHighAccuracy: true,
+          timeout: 25000,
+          maximumAge: 3600000
+        }
+        )
       .catch((err) => {
-        console.error(err.message);
+        this.setState({error: err.message});
       });
   };
 
@@ -147,80 +153,90 @@ class HomeTab extends Component {
     // this.fetchTopEvents();
   };
 
-  fetchWEather = () => {
-    const url = "http://pc18.beuth-hochschule.de/php/Stud/Rudi/weather/wetter.php";
-    const body = {};
-    fetch(url + "?lat=" + this.state.latitude + "&lon=" + this.state.longitude + "&mode=forecast", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    }).then((res) => {
-      if (res.ok) {
-        // console.log(res.json());
-        //TODO display result
-      }
-    }, function (e) {
-      console.log("Error!" + e);
-    });
-  };
+  // fetchWEather = () => {
+  //   const url = "http://pc18.beuth-hochschule.de/php/Stud/Rudi/weather/wetter.php";
+  //   const body = {};
+  //   fetch(url + "?lat=" + this.state.latitude + "&lon=" + this.state.longitude + "&mode=forecast", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify(body)
+  //   }).then((res) => {
+  //     if (res.ok) {
+  //       // console.log(res.json());
+  //       //TODO display result
+  //     }
+  //   }, function (e) {
+  //     // console.log("Error!" + e);
+  //   });
+  // };
 
-  tabRenderer() {
+  // tabRenderer() {
+  //
+  //   switch (this.state.selectedTab) {
+  //     case 0:
+  //       return (
+  //         <View>
+  //           <Text>Added places</Text>
+  //           <EventsList
+  //             baseUrl={this.state.baseUrl}
+  //             latitude={this.state.latitude}
+  //             longitude={this.state.longitude}
+  //             onItemSelected={this.itemSelectHandler}
+  //             limit={30}
+  //             fromDate={this.state.fromDate}
+  //           />
+  //
+  //         </View>
+  //       );
+  //     case 1:
+  //       return (
+  //         <View>
+  //           <Text>
+  //             Coming soon
+  //           </Text>
+  //         </View>
+  //       );
+  //     case 2:
+  //       return (
+  //         <View>
+  //           <Text>
+  //             Coming not very soon
+  //           </Text>
+  //         </View>
+  //       );
+  //     case 3:
+  //       return (
+  //         <View>
+  //           <Text>
+  //             not Coming
+  //           </Text>
+  //         </View>
+  //       );
+  //     default:
+  //       return (
+  //         <PlaceList
+  //           places={this.props.places}
+  //           onItemSelected={this.itemSelectHandler}
+  //         />
+  //       );
+  //   }
+  // };
 
-    switch (this.state.selectedTab) {
-      case 0:
-        return (
-          <View>
-            <Text>Added places</Text>
-            <EventsList
-              baseUrl={this.state.baseUrl}
-              latitude={this.state.latitude}
-              longitude={this.state.longitude}
-              onItemSelected={this.itemSelectHandler}
-              limit={30}
-              fromDate={this.state.fromDate}
-            />
-
-          </View>
-        );
-      case 1:
-        return (
-          <View>
-            <Text>
-              Coming soon
-            </Text>
-          </View>
-        );
-      case 2:
-        return (
-          <View>
-            <Text>
-              Coming not very soon
-            </Text>
-          </View>
-        );
-      case 3:
-        return (
-          <View>
-            <Text>
-              not Coming
-            </Text>
-          </View>
-        );
-      default:
-        return (
-          <PlaceList
-            places={this.props.places}
-            onItemSelected={this.itemSelectHandler}
-          />
-        );
+  renderError = () => {
+    if(this.state.error)
+    return (
+      <Text>Err: {this.state.error}</Text>
+    );
+    else{
+      return (<View/>);
     }
   };
-
   render() {
     return (
       <View>
+        {this.renderError()}
         <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
 
         <View style={{flexDirection: "row"}}>
