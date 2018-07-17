@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {CheckBox, Picker, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {CheckBox, ListView, Picker, ScrollView, StyleSheet, Text, View} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import ExpandablePanel from "../../components/ExpandablePanel";
-
 
 class FilterTab extends Component {
   constructor(props) {
@@ -43,8 +42,7 @@ class FilterTab extends Component {
         {id: 27, name: "sports", selected: false},
         {id: 28, name: "technology", selected: false},
         {id: 29, name: "other", selected: false}
-      ],
-      open: false
+      ]
     }
   }
 
@@ -107,19 +105,18 @@ class FilterTab extends Component {
       );
     });
 
+
+
     return (
       <View style={{flex: 1}}>
         <ScrollView style={styles.container}>
-          <ExpandablePanel title="A Panel with short content text">
-            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+          <ExpandablePanel title="Cathegories">
+            {checks}
           </ExpandablePanel>
-          <ExpandablePanel title="A Panel with long content text">
-            <Text>Lorem ipsum...</Text>
-          </ExpandablePanel>
-          <ExpandablePanel title="Another Panel">
-            <Text>Lorem ipsum dolor sit amet...</Text>
-          </ExpandablePanel>
+
         </ScrollView>
+
+
         {/*<Picker*/}
           {/*selectedValue={this.state.catMode}*/}
           {/*style={{height: 50, width: 100}}*/}

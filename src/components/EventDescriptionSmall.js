@@ -25,6 +25,7 @@ class EventDescriptionSmall extends Component {
             style={styles.placeImage}
           />
             <View style={{flexDirection: "column", width: "50%"}}>
+              <Text>Radius: {this.props.eventInfo.radius}</Text>
               <Text>{this.props.eventInfo.event_date}</Text>
               <Text>{this.props.eventInfo.event_category_id}</Text>
               <Text>{this.props.eventInfo.event_title}</Text>

@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import {StyleSheet,Text,View,TouchableHighlight} from 'react-native';
+import {StyleSheet, Text, View, TouchableHighlight, Animated, Image} from 'react-native';
 import Icon from "react-native-vector-icons";
 
 
@@ -7,41 +7,83 @@ import Icon from "react-native-vector-icons";
 class ExpandablePanel extends Component{
   constructor(props){
     super(props);
+    this.icons = {
+      'up'    : require('../assets/Arrowhead-01-128.png'),
+      'down'  : require('../assets/Arrowhead-Down-01-128.png')
+    };
+
     this.state = {
       title       : props.title,
-      expanded    : true
+      expanded    : false
     };
   }
 
-  toggle(){
+  toggle = () => {
+    let initialValue    = this.state.expanded? this.state.maxHeight + this.state.minHeight : this.state.minHeight,
+      finalValue      = this.state.expanded? this.state.minHeight : this.state.maxHeight + this.state.minHeight;
 
-  }
+    this.setState({
+      expanded : !this.state.expanded
+    });
 
+    this.state.animation.setValue(initialValue);
+    Animated.spring(
+      this.state.animation,
+      {
+        toValue: finalValue
+      }
+    ).start();
+  };
+
+  setMaxHeight=(event)=>{
+    this.setState({
+      maxHeight   : event.nativeEvent.layout.height
+    });
+  };
+
+  setMinHeight =(event) =>{
+    this.setState({
+      minHeight   : event.nativeEvent.layout.height,
+      animation: new Animated.Value(event.nativeEvent.layout.height)
+    });
+  };
 
   render(){
-    let icon = <Icon size={20} name="map" />;
+    // let icon = <Icon size={20} name="map" />;
+    //
+    // if(this.state.expanded){
+    //   icon = <Icon size={20} name="map"/>;
+    // }
+
+    let icon = this.icons['down'];
 
     if(this.state.expanded){
-      icon = <Icon size={20} name="map"/>;
+      icon = this.icons['up'];
     }
 
     //Step 5
     return (
-      <View style={styles.container} >
-        <View style={styles.titleContainer}>
+      <Animated.View
+        style={[styles.container,{height: this.state.animation}]}>
+        <View style={styles.titleContainer} onLayout={this.setMinHeight}>
           <Text style={styles.title}>{this.state.title}</Text>
           <TouchableHighlight
             style={styles.button}
             onPress={this.toggle.bind(this)}
-            underlayColor="#f1f1f1">
-            <Text>Oh</Text>
+            underlayColor="#f1f1f1"
+          >
+            <Image
+              style={styles.buttonImage}
+              source={icon}
+            />
           </TouchableHighlight>
         </View>
 
-        <View style={styles.body}>
+        <View style={styles.body} onLayout={this.setMaxHeight.bind(this)}>
           {this.props.children}
         </View>
-      </View>
+
+      </Animated.View>
     );
   }
 }

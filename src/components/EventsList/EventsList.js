@@ -49,8 +49,10 @@ class EventsList extends Component {
         return response.json();
       })
       .then( (myJson) => {
+        let sortedArray = myJson.events;
+        sortedArray.sort((a,b)=>{return (a.radius > b.radius) ? 1 : ((b.radius > a.radius) ? -1 : 0);} );
         this.setState({
-          events: myJson.events
+          events: sortedArray
         });
         // console.log(that.state.events);
       });
