@@ -55,11 +55,8 @@ class ExpandablePanel extends Component{
     //   icon = <Icon size={20} name="map"/>;
     // }
 
-    let icon = this.icons['down'];
+    let icon = (this.state.expanded)?  this.icons['up'] :this.icons['down'];
 
-    if(this.state.expanded){
-      icon = this.icons['up'];
-    }
 
     //Step 5
     return (

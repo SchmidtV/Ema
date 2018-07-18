@@ -42,7 +42,8 @@ class FilterTab extends Component {
         {id: 27, name: "sports", selected: false},
         {id: 28, name: "technology", selected: false},
         {id: 29, name: "other", selected: false}
-      ]
+      ],
+      style: {}
     }
   }
 
@@ -90,6 +91,10 @@ class FilterTab extends Component {
       });
   };
 
+  resizeModal=(ev)=> {
+    this.setState({style: {height: ev.nativeEvent.layout.height + 10}});
+  };
+
   render() {
     const checks = this.state.catData.map((d) => {
       return (
@@ -109,13 +114,14 @@ class FilterTab extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <ScrollView style={styles.container}>
+        <View style={styles.inner} onLayout={(ev)=>{this.resizeModal(ev)}}>
+        {/*<ScrollView style={styles.container} >*/}
           <ExpandablePanel title="Cathegories">
             {checks}
           </ExpandablePanel>
 
-        </ScrollView>
-
+        {/*</ScrollView>*/}
+        </View>
 
         {/*<Picker*/}
           {/*selectedValue={this.state.catMode}*/}
