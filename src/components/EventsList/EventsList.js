@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {StyleSheet, FlatList, View} from "react-native";
 import EventDescriptionSmall from "../../components/EventDescriptionSmall";
+import {connect} from "react-redux";
+import {addPlacesToDisplayOnMap} from "../../store/actions";
 
 class EventsList extends Component {
 
@@ -51,6 +53,7 @@ class EventsList extends Component {
       .then( (myJson) => {
         let sortedArray = myJson.events;
         sortedArray.sort((a,b)=>{return (a.radius > b.radius) ? 1 : ((b.radius > a.radius) ? -1 : 0);} );
+        this.props.onAddPlacesToDisplayOnMap(sortedArray);
         this.setState({
           events: sortedArray
         });
@@ -86,4 +89,13 @@ const
     }
   });
 
-export default EventsList;
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddPlacesToDisplayOnMap: (placesArray) => dispatch(addPlacesToDisplayOnMap(placesArray))
+  };
+};
+
+export default connect(null , mapDispatchToProps)(EventsList);
+

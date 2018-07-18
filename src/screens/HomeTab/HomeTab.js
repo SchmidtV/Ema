@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Button, Text, StyleSheet, View} from "react-native";
 import {connect} from "react-redux";
-import {addPlace} from "../../store/actions";
+import {addPlace, addCurrentLocation, addPlacesToDisplayOnMap} from "../../store/actions";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import DatePicker from 'react-native-datepicker';
 import MaterialTabs from 'react-native-material-tabs';
@@ -123,22 +123,26 @@ class HomeTab extends Component {
   getCurrentPosition = () => {
     this.getPosition()
       .then((position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-          selectedTab: 1
-        });
-        //TODO do something here
-        // console.log("Lat: " + this.state.latitude +" Lon: " + this.state.longitude);
-        // this.fetchWEather();
-      },
+          this.props.onAddCurrentLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+          this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null,
+            selectedTab: 1
+          });
+          //TODO do something here
+          // console.log("Lat: " + this.state.latitude +" Lon: " + this.state.longitude);
+          // this.fetchWEather();
+        },
         {
           enableHighAccuracy: true,
           timeout: 25000,
           maximumAge: 3600000
         }
-        )
+      )
       .catch((err) => {
         this.setState({error: err.message});
       });
@@ -225,14 +229,15 @@ class HomeTab extends Component {
   // };
 
   renderError = () => {
-    if(this.state.error)
-    return (
-      <Text>Err: {this.state.error}</Text>
-    );
-    else{
+    if (this.state.error)
+      return (
+        <Text>Err: {this.state.error}</Text>
+      );
+    else {
       return (<View/>);
     }
   };
+
   render() {
     return (
       <View>
@@ -330,7 +335,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddPlace: (placeName) => dispatch(addPlace(placeName))
+    onAddPlace: (placeName) => dispatch(addPlace(placeName)),
+    onAddPlacesToDisplayOnMap: (placesArray) => dispatch(addPlacesToDisplayOnMap(placesArray)),
+    onAddCurrentLocation: (location) => dispatch(addCurrentLocation(location))
   };
 };
 
