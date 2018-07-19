@@ -5,71 +5,84 @@ import {Text} from "react-native";
 import {connect} from "react-redux";
 import {deletePlace} from "../../store/actions/index";
 import WeatherItem from "../../components/WeatherItem";
-
+import {catData} from "../../components/Cathegories";
 
 class PlaceDetail extends Component {
-    constructor(props) {
-        super(props);
-        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
-    }
+  constructor(props) {
+    super(props);
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+  }
 
-    onNavigatorEvent = event => {
-        if(event.type === "NavBarButtonPress"){
-            if(event.id === "sideDrawerToggle"){
-                this.props.navigator.toggleDrawer({
-                    side: "left"
-                })
-            }
-        }
-    };
-    placeDeletedHandler = () => {
-        this.props.onDeletePlace(this.props.selectedPlace.t_event_id);
-        this.props.navigator.pop();
-    };
-
-    render() {
-
-      let imgUrl = null;
-      if (this.props.selectedPlace.event_imgurl) {
-        imgUrl = {uri: this.props.selectedPlace.event_imgurl};
-      } else {
-        imgUrl = require("../../assets/NoImgArt.png");
+  onNavigatorEvent = event => {
+    if (event.type === "NavBarButtonPress") {
+      if (event.id === "sideDrawerToggle") {
+        this.props.navigator.toggleDrawer({
+          side: "left"
+        })
       }
-
-        return (
-            <View style={styles.container}>
-                <View>
-                    <Image
-                        source={imgUrl}
-                        style={styles.placeImage}
-                        resizeMode="contain"
-                    />
-                    <Text style={styles.placeName}>{this.props.selectedPlace.event_title}</Text>
-                </View>
-            </View>
-        );
     }
+  };
+  placeDeletedHandler = () => {
+    this.props.onDeletePlace(this.props.selectedPlace.t_event_id);
+    this.props.navigator.pop();
+  };
+
+  renderSound = () => {
+    if (this.props.selectedPlace.event_category_id === 1) {
+      return (
+        <Text>
+          Music event!
+        </Text>
+      );
+
+    }
+  };
+
+  render() {
+
+    let imgUrl = null;
+    if (this.props.selectedPlace.event_imgurl) {
+      imgUrl = {uri: this.props.selectedPlace.event_imgurl};
+    } else {
+      imgUrl = require("../../assets/NoImgArt.png");
+    }
+
+    return (
+      <View style={styles.container}>
+
+        <View>
+          <Image
+            source={imgUrl}
+            style={styles.placeImage}
+            resizeMode="contain"
+          />
+          <Text style={styles.placeName}>{this.props.selectedPlace.event_title}</Text>
+          {this.renderSound()}
+        </View>
+      </View>
+    );
+  }
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        margin: 20
-    },
-    placeImage:  {
-        width: "100%",
-        height: 200
-    },
-    placeName: {
-        fontWeight: "bold",
-        textAlign: "center",
-        fontSize: 28
+  container: {
+    margin: 20
+  },
+  placeImage: {
+    width: "100%",
+    height: 200
+  },
+  placeName: {
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 28
 
-    }
+  }
 });
 const mapDispatchToProps = dispatch => {
-    return {
-        onDeletePlace: (key) => dispatch(deletePlace(key))
-    };
+  return {
+    onDeletePlace: (key) => dispatch(deletePlace(key))
+  };
 };
-export default connect (null, mapDispatchToProps)(PlaceDetail);
+export default connect(null, mapDispatchToProps)(PlaceDetail);

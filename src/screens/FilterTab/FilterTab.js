@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {CheckBox, ListView, Picker, ScrollView, StyleSheet, Text, View} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import ExpandablePanel from "../../components/ExpandablePanel";
+import {catData} from "../../components/Cathegories";
 
 class FilterTab extends Component {
   constructor(props) {
@@ -12,37 +13,7 @@ class FilterTab extends Component {
       price: null,
       latitude: 0,
       longitude: 0,
-      catData: [
-        {id: 1, name: "music", selected: false},
-        {id: 2, name: "conference", selected: false},
-        {id: 3, name: "comedy", selected: false},
-        {id: 4, name: "learning_education", selected: false},
-        {id: 5, name: "family_fun_kids", selected: false},
-        {id: 6, name: "festivals_parades", selected: false},
-        {id: 7, name: "movies_film", selected: false},
-        {id: 8, name: "food", selected: false},
-        {id: 9, name: "fundraisers", selected: false},
-        {id: 10, name: "art", selected: false},
-        {id: 11, name: "support", selected: false},
-        {id: 12, name: "holiday", selected: false},
-        {id: 13, name: "books", selected: false},
-        {id: 14, name: "attractions", selected: false},
-        {id: 15, name: "community", selected: false},
-        {id: 16, name: "business", selected: false},
-        {id: 17, name: "singles_social", selected: false},
-        {id: 18, name: "schools_alumni", selected: false},
-        {id: 19, name: "clubs_associations", selected: false},
-        {id: 20, name: "outdoors_recreation", selected: false},
-        {id: 21, name: "performing_arts", selected: false},
-        {id: 22, name: "animals", selected: false},
-        {id: 23, name: "politics_activism", selected: false},
-        {id: 24, name: "sales", selected: false},
-        {id: 25, name: "science", selected: false},
-        {id: 26, name: "religion_spirituality", selected: false},
-        {id: 27, name: "sports", selected: false},
-        {id: 28, name: "technology", selected: false},
-        {id: 29, name: "other", selected: false}
-      ],
+      catData: catData,
       style: {}
     }
   }

@@ -51,11 +51,12 @@ class MapTab extends Component {
     //
     if (this.props.placesArray) {
       return (
-        this.props.placesArray.map(place => (
+        this.props.placesArray.map((place, index) => (
           <Marker
             coordinate={{latitude: parseFloat(place.event_lat), longitude: parseFloat(place.event_lon)}}
             title={place.event_name}
             description={place.event_title}
+            key={index}
           />
         ))
       );
@@ -66,7 +67,7 @@ class MapTab extends Component {
     //TODO change to cur loc
     // let curLoc = (this.props.curLocation) ? this.props.curLocation : {latitude: 52.506370, longitude: 13.449382};
     let curLoc = (this.props.curLocation) ? {latitude: 52.506370, longitude: 13.449382}: {latitude: 52.506370, longitude: 13.449382};
-    
+
     return (
       <View>
         <View style={styles.container}>
