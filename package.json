@@ -23,6 +23,7 @@
     "react-native-accordion": "^1.0.1",
     "react-native-datepicker": "^1.7.2",
     "react-native-expandable": "^1.0.2",
+    "react-native-google-maps-directions": "^2.0.0",
     "react-native-maps": "^0.21.0",
     "react-native-material-tabs": "^3.6.0",
     "react-native-material-ui": "^1.30.1",

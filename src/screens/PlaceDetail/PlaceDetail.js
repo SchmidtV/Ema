@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import {deletePlace} from "../../store/actions/index";
 import WeatherItem from "../../components/WeatherItem";
 import {catData} from "../../components/Cathegories";
-
+import getDirections from "react-native-google-maps-directions";
 class PlaceDetail extends Component {
   constructor(props) {
     super(props);
@@ -38,6 +38,62 @@ class PlaceDetail extends Component {
     }
   };
 
+
+
+
+
+
+  directionsHandler = (event) => {
+    // const selectedEvent = this.state.topEvents.find(event => {
+    //   return event.event_title === key;
+    // });
+
+    // console.log("Key: " + key);
+    // console.log("First event title: " + this.state.topEvents[0].event_title);
+    this.props.navigator.push({
+      screen: "Ema.DirectionsScreen",
+      title: "Directions"
+      // ,
+      // passProps: {
+      //   selectedPlace: event
+      // }
+    });
+  };
+
+  handleGetDirections = () => {
+    let source;
+    if (this.props.curLocation){
+      console.log(this.props.curLocation);
+      source = this.props.curLocation;
+    }else{
+      source = {
+        latitude: -33.8356372,
+        longitude: 18.6947617
+      };
+    }
+
+    console.log(this.props.selectedPlace.event_lat);
+    const data = {
+      source: source,
+      destination: {
+        latitude: parseInt(this.props.selectedPlace.event_lat),
+        longitude: parseInt(this.props.selectedPlace.event_lon)
+      },
+      params: [
+        {
+          key: "travelmode",
+          value: "transit"        // may be "walking", "bicycling" or "transit" as well
+        },
+        {
+          key: "dir_action",
+          value: "navigate"       // this instantly initializes navigation using the given travel mode
+        }
+      ]
+    };
+
+    getDirections(data)
+  };
+
   render() {
 
     let imgUrl = null;
@@ -58,6 +114,9 @@ class PlaceDetail extends Component {
           />
           <Text style={styles.placeName}>{this.props.selectedPlace.event_title}</Text>
           {this.renderSound()}
+          <View style={styles.container}>
+            <Button onPress={this.handleGetDirections} title="Get Directions" />
+          </View>
         </View>
       </View>
     );
@@ -80,9 +139,18 @@ const styles = StyleSheet.create({
 
   }
 });
+
+
+const mapStateToProps = state => {
+  return {
+    curLocation: state.places.curLocation
+  };
+};
+
+
 const mapDispatchToProps = dispatch => {
   return {
     onDeletePlace: (key) => dispatch(deletePlace(key))
   };
 };
-export default connect(null, mapDispatchToProps)(PlaceDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(PlaceDetail);
