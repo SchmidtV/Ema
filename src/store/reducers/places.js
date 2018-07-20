@@ -2,7 +2,8 @@ import {ADD_PLACE, DELETE_PLACE, ADD_PLACES_TO_DISPLAY_ON_MAP, ADD_CURRENT_LOCAT
 
 const initialState = {
   places: [],
-  placesArray: []
+  placesArray: [],
+  baseUrl: "http://pc18.beuth-hochschule.de/php/Stud/Rudi/"
 
 };
 const reducer = (state = initialState, action) => {
