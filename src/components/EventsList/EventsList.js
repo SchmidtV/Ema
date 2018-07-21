@@ -14,35 +14,41 @@ class EventsList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log("props changed");
     this.fetchEvents(nextProps);
   }
 
 
   fetchEvents = (curProps = this.props) => {
-    let url = curProps.baseUrl + "events/get_events.php";
-    if(curProps.limit){
-      url= url + "?lim=" + curProps.limit;
-    }else{
-      url= url + "?lim=30";
+      if (!(curProps.longitude && curProps.latitude) && !curProps.eventName) {
+        console.log("No cords + no name");
+        return;
+      }
+
+      let url = curProps.baseUrl + "events/get_events.php";
+      if (curProps.limit) {
+      url = url + "?lim=" + curProps.limit;
+    } else {
+      url = url + "?lim=50";
     }
 
-    if(curProps.longitude && curProps.longitude){
-      url = url + "&lon="+curProps.longitude+"&lat=" +curProps.latitude;
-    }else{
-      return;
+    if (curProps.longitude && curProps.latitude) {
+      url = url + "&lon=" + curProps.longitude + "&lat=" + curProps.latitude;
     }
 
-    if(curProps.fromDate){
-      url = url + "&fromdate="+ curProps.fromDate;
+    if (curProps.eventName) {
+      url = url + "&name=" + curProps.eventName;
     }
 
-    if(curProps.toDate){
-      url = url + "&todate="+ curProps.toDate;
+    if (curProps.fromDate) {
+      url = url + "&fromdate=" + curProps.fromDate;
     }
 
-    if(curProps.categories){
-      url = url + "&category="+ curProps.categories;
+    if (curProps.toDate) {
+      url = url + "&todate=" + curProps.toDate;
+    }
+
+    if (curProps.categories && curProps.categories.toString().length > 0) {
+      url = url + "&category=" + curProps.categories.toString();
     }
 
     console.log("Fetching events: " + url);
@@ -50,14 +56,15 @@ class EventsList extends Component {
       .then((response) => {
         return response.json();
       })
-      .then( (myJson) => {
+      .then((myJson) => {
         let sortedArray = myJson.events;
-        sortedArray.sort((a,b)=>{return (a.radius > b.radius) ? 1 : ((b.radius > a.radius) ? -1 : 0);} );
+        sortedArray.sort((a, b) => {
+          return (a.radius > b.radius) ? 1 : ((b.radius > a.radius) ? -1 : 0);
+        });
         this.props.onAddPlacesToDisplayOnMap(sortedArray);
         this.setState({
           events: sortedArray
         });
-        // console.log(that.state.events);
       });
 
   };
@@ -81,15 +88,11 @@ class EventsList extends Component {
   }
 }
 
-
-const
-  styles = StyleSheet.create({
-    listContainer: {
-      width: "100%",
-    }
-  });
-
-
+const styles = StyleSheet.create({
+  listContainer: {
+    width: "100%",
+  }
+});
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -97,5 +100,5 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null , mapDispatchToProps)(EventsList);
+export default connect(null, mapDispatchToProps)(EventsList);
 

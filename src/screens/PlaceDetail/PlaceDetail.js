@@ -67,10 +67,11 @@ class PlaceDetail extends Component {
       source = this.props.curLocation;
     }else{
       source = {
-        latitude: -33.8356372,
-        longitude: 18.6947617
+        latitude: 52.511326,
+        longitude: 13.458737
       };
     }
+
 
     console.log(this.props.selectedPlace.event_lat);
     const data = {

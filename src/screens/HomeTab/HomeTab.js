@@ -4,8 +4,6 @@ import {connect} from "react-redux";
 import {addPlace, addCurrentLocation, addPlacesToDisplayOnMap} from "../../store/actions";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import DatePicker from 'react-native-datepicker';
-import MaterialTabs from 'react-native-material-tabs';
-import WeatherItem from "../../components/WeatherItem";
 import EventsList from "../../components/EventsList/EventsList";
 
 
@@ -15,48 +13,17 @@ class HomeTab extends Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     this.state = {
       baseUrl: "http://pc18.beuth-hochschule.de/php/Stud/Rudi/",
-      fromDate: this.getCurDateTimeInProprFormat(),
+      fromDate: this.getCurDateTimeInProperFormat(),
       toDate: null,
       latitude: null,
       longitude: null,
-      selectedTab: 0
+      selectedTab: 0,
+      eventName: ""
     };
     // this.fetchTopEvents();
     this.getCurrentPosition();
   }
 
-  fetchTopEvents = () => {
-    // // console.log(this.state.events);
-    // const url = this.state.baseUrl +"events/get_events.php?lim=30";
-    //
-    // that = this;
-    // window.fetch(url, this)
-    //   .then((response) =>{
-    //     return response.json();
-    //   })
-    //   .then(function(myJson) {
-    //     // console.log(myJson.events);
-    //     that.setState({
-    //       topEvents: myJson.events
-    //     });
-    //   });
-
-    // console.log(this.state.events);
-    // fetch(url, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify(body)
-    // }).then((res) => {
-    //   if (res.ok) {
-    //     console.log(res);
-    //     //TODO display result
-    //   }
-    // }, function (e) {
-    //   console.log("Error!" + e);
-    // });
-  };
 
   onNavigatorEvent = event => {
     if (event.type === "NavBarButtonPress") {
@@ -68,31 +35,7 @@ class HomeTab extends Component {
     }
   };
 
-  fetchEventByLocation = () => {
-    url = baseUrl + ""
-    fetch(this.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    }).then((res) => {
-      if (res.ok) {
-        console.log(res);
-        //TODO display result
-      }
-    }, function (e) {
-      console.log("Error!" + e);
-    });
-  };
-
   itemSelectHandler = (event) => {
-    // const selectedEvent = this.state.topEvents.find(event => {
-    //   return event.event_title === key;
-    // });
-
-    // console.log("Key: " + key);
-    // console.log("First event title: " + this.state.topEvents[0].event_title);
     this.props.navigator.push({
       screen: "Ema.PlaceDetailScreen",
       title: event.event_title,
@@ -102,16 +45,12 @@ class HomeTab extends Component {
     });
   };
 
-  placeAddedHandler = placeName => {
-    this.props.onAddPlace(placeName);
-  };
-
-  getCurDateTimeInProprFormat() {
+  getCurDateTimeInProperFormat() {
     return (new Date().toJSON().slice(0, 16).replace(/T/g, ' '));
   };
 
   nowPressedHandler = () => {
-    this.setState({fromDate: this.getCurDateTimeInProprFormat()});
+    this.setState({fromDate: this.getCurDateTimeInProperFormat()});
   };
 
   getPosition = function (options) {
@@ -148,85 +87,7 @@ class HomeTab extends Component {
       });
   };
 
-  //TODO DELETE
-  dontTouchMyButton = () => {
 
-    console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    // this.getCurrentPosition();
-    // console.log(this.state.baseUrl);
-    // this.fetchTopEvents();
-  };
-
-  // fetchWEather = () => {
-  //   const url = "http://pc18.beuth-hochschule.de/php/Stud/Rudi/weather/wetter.php";
-  //   const body = {};
-  //   fetch(url + "?lat=" + this.state.latitude + "&lon=" + this.state.longitude + "&mode=forecast", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify(body)
-  //   }).then((res) => {
-  //     if (res.ok) {
-  //       // console.log(res.json());
-  //       //TODO display result
-  //     }
-  //   }, function (e) {
-  //     // console.log("Error!" + e);
-  //   });
-  // };
-
-  // tabRenderer() {
-  //
-  //   switch (this.state.selectedTab) {
-  //     case 0:
-  //       return (
-  //         <View>
-  //           <Text>Added places</Text>
-  //           <EventsList
-  //             baseUrl={this.state.baseUrl}
-  //             latitude={this.state.latitude}
-  //             longitude={this.state.longitude}
-  //             onItemSelected={this.itemSelectHandler}
-  //             limit={30}
-  //             fromDate={this.state.fromDate}
-  //           />
-  //
-  //         </View>
-  //       );
-  //     case 1:
-  //       return (
-  //         <View>
-  //           <Text>
-  //             Coming soon
-  //           </Text>
-  //         </View>
-  //       );
-  //     case 2:
-  //       return (
-  //         <View>
-  //           <Text>
-  //             Coming not very soon
-  //           </Text>
-  //         </View>
-  //       );
-  //     case 3:
-  //       return (
-  //         <View>
-  //           <Text>
-  //             not Coming
-  //           </Text>
-  //         </View>
-  //       );
-  //     default:
-  //       return (
-  //         <PlaceList
-  //           places={this.props.places}
-  //           onItemSelected={this.itemSelectHandler}
-  //         />
-  //       );
-  //   }
-  // };
 
   renderError = () => {
     if (this.state.error)
@@ -238,11 +99,21 @@ class HomeTab extends Component {
     }
   };
 
+
+  onPlaceLongEnoughHandler = (eventName) => {
+    console.log("Got the name: " + eventName);
+    this.setState({
+      eventName
+    });
+  };
+
   render() {
     return (
       <View>
         {this.renderError()}
-        <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
+        <PlaceInput
+          onPlaceLongEnough={this.onPlaceLongEnoughHandler}
+        />
 
         <View style={{flexDirection: "row"}}>
           <View>
@@ -251,7 +122,7 @@ class HomeTab extends Component {
               style={{width: 200}}
               date={this.state.fromDate}
               mode="datetime"
-              minDate={this.getCurDateTimeInProprFormat()}
+              minDate={this.getCurDateTimeInProperFormat()}
               format="YYYY-MM-DD HH:mm"
               androidMode="spinner"
               confirmBtnText="Confirm"
@@ -276,7 +147,7 @@ class HomeTab extends Component {
             <Text>Untill:</Text>
             <DatePicker
               style={{width: 200}}
-              date={this.getCurDateTimeInProprFormat()}
+              date={this.getCurDateTimeInProperFormat()}
               mode="datetime"
               minDate={this.state.fromDate}
               format="YYYY-MM-DD HH:mm"
@@ -300,11 +171,6 @@ class HomeTab extends Component {
           </View>
         </View>
         <Text onPress={this.nowPressedHandler}>Now</Text>
-        {/*<MaterialTabs*/}
-        {/*items={['For you', 'Soon', 'Best', "Near Me"]}*/}
-        {/*selectedIndex={this.state.selectedTab}*/}
-        {/*onChange={index => this.setState({ selectedTab: index })}*/}
-        {/*/>*/}
 
         <View>
           <Text>Added places</Text>
@@ -313,12 +179,12 @@ class HomeTab extends Component {
             onItemSelected={this.itemSelectHandler}
             latitude={this.state.latitude}
             longitude={this.state.longitude}
+            eventName={this.state.eventName}
             limit={30}
             fromDate={this.state.fromDate}
             toDate={this.state.toDate}
           />
         </View>
-        <Button title="Special button for special person" onPress={this.dontTouchMyButton}/>
 
 
       </View>

@@ -15,13 +15,16 @@ class PlaceInput extends Component {
     this.setState({
       placeName: val
     });
+
   };
 
   placeSubmitHandler = () => {
     if (this.state.placeName.trim() === "") {
       return;
     }
-    this.props.onPlaceAdded(this.state.placeName);
+    if (this.state.placeName.trim().length >= 2) {
+      this.props.onPlaceLongEnough(this.state.placeName);
+    }
   };
 
   datePickerHandler = () => {
@@ -39,7 +42,7 @@ class PlaceInput extends Component {
           style={styles.placeInput}
         />
         <Button
-          title="Add"
+          title="Search"
           style={styles.placeButton}
           onPress={this.placeSubmitHandler}
         />

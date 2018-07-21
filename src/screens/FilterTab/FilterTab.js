@@ -1,10 +1,11 @@
 import React, {Component} from "react";
-import {Button, CheckBox, ListView, Picker, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Button, CheckBox, ListView, Picker, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import ExpandablePanel from "../../components/ExpandablePanel";
 import {catData} from "../../components/Cathegories";
 import {connect} from "react-redux";
 import DatePicker from "react-native-datepicker";
+import {addPlacesToDisplayOnMap} from "../../store/actions";
 
 class FilterTab extends Component {
   constructor(props) {
@@ -19,10 +20,13 @@ class FilterTab extends Component {
       style: {},
       fromDate: this.getCurDateTimeInProprFormat(),
       toDate: null,
+      maxRange: null,
+      events: []
     }
   }
 
   changeSelection(id) {
+    console.log(id);
     let state = this.state.catData.map(function (d) {
       return {
         id: d.id,
@@ -34,73 +38,136 @@ class FilterTab extends Component {
     // console.log(this.state.catData);
   };
 
-  getPosition = function (options) {
-    return new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, reject, options);
-    });
-  };
 
-  getCurrentPosition = () => {
-    this.getPosition()
-      .then((position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null
-        });
-        //TODO do something here
-        console.log("Lat: " + this.state.latitude +" Lon: " + this.state.longitude);
-      })
-      .catch((err) => {
-        console.error(err.message);
-      });
-  };
 
   getCurDateTimeInProprFormat() {
     return (new Date().toJSON().slice(0, 16).replace(/T/g, ' '));
   };
 
-  resizeModal=(ev)=> {
+  resizeModal = (ev) => {
     this.setState({style: {height: ev.nativeEvent.layout.height + 10}});
   };
 
-  onSubmitPressedHandler = (lim= 50) => {
-    let url = this.props.baseUrl + "events/get_events.php";
-    if(lim){
-      url = url + "?lim=" + lim;
-    }else{
-      url= url +"?";
-    }
 
+  onCatClicked = (event) => {
+    this.props.navigator.push({
+      screen: "Ema.CategoriesScreen",
+      title: "Categories",
+      passProps: {
+        catData: this.state.catData,
+        changeSelection: this.changeSelection.bind(this)
+      }
+    });
+  };
 
-    if(this.state.longitude && this.state.longitude){
-      url = url + "&lon="+this.state.longitude+"&lat=" +this.state.latitude;
-    }else{
+  onSubmitPressedHandler = () => {
+    if (!(this.props.curLocation.longitude && this.props.curLocation.latitude) && !this.state.eventName) {
+      console.log("No cords + no name");
       return;
     }
 
-    if(this.state.fromDate){
-      url = url + "&fromdate="+ this.state.fromDate;
+    let url = this.props.baseUrl + "events/get_events.php";
+    if (this.state.limit) {
+      url = url + "?lim=" + this.state.limit;
+    } else {
+      url = url + "?";
     }
 
-    if(this.state.toDate){
-      url = url + "&todate="+ this.state.toDate;
+    if (this.props.curLocation.longitude && this.props.curLocation.latitude) {
+      url = url + "&lon=" + this.props.curLocation.longitude + "&lat=" + this.props.curLocation.latitude;
     }
 
-    let catList=[];
+    if (this.state.eventName) {
+      url = url + "&name=" + this.state.eventName;
+    } else if (this.state.maxRange && parseInt(this.state.maxRange) > 0) {
+      url = url + "&radius=" + this.state.maxRange;
+    }
+
+    if (this.state.fromDate) {
+      url = url + "&fromdate=" + this.state.fromDate;
+    }
+
+    if (this.state.toDate) {
+      url = url + "&todate=" + this.state.toDate;
+    }
+
+    let catList = [];
     this.state.catData.map(category => {
-      if(category.selected){
+      if (category.selected) {
         catList.push(category.id)
       }
     });
-    if(catList){
-      url = url + "&category="+ catList.toString();
+
+    if (catList && catList.toString().length > 0) {
+      url = url + "&category=" + catList.toString();
     }
-    // http://pc18.beuth-hochschule.de/php/Stud/Rudi/events/.. 19:00:00&todate=2018-10-20 23:00:00&category=2,3,4
+
+    console.log("Fetching events: " + url);
+    fetch(url, this)
+      .then((response) => {
+        return response.json();
+      })
+      .then((myJson) => {
+        let sortedArray = myJson.events;
+        sortedArray.sort((a, b) => {
+          return (a.radius > b.radius) ? 1 : ((b.radius > a.radius) ? -1 : 0);
+        });
+        this.props.onAddPlacesToDisplayOnMap(sortedArray);
+        this.setState({
+          events: sortedArray
+        });
+      });
+
+  };
+
+
+  onSubmitPressedHandler1 = () => {
+    let url = this.props.baseUrl + "events/get_events.php";
+    if (this.state.lim) {
+      url = url + "?lim=" + lim;
+    } else {
+      url = url + "?lim=50";
+    }
+
+
+    if (this.state.longitude && this.state.longitude) {
+      url = url + "&lon=" + this.state.longitude + "&lat=" + this.state.latitude;
+    } else {
+      return;
+    }
+
+    if (this.state.fromDate) {
+      url = url + "&fromdate=" + this.state.fromDate;
+    }
+
+    if (this.state.toDate) {
+      url = url + "&todate=" + this.state.toDate;
+    }
+
+    let catList = [];
+    this.state.catData.map(category => {
+      if (category.selected) {
+        catList.push(category.id)
+      }
+    });
+
+    if (catList && catList.toString().length > 0) {
+      url = url + "&category=" + catList.toString();
+    }
+
+
 
     console.log(url);
   };
 
+  maxRangeChangeHandler = (value) => {
+    if(isNaN(value)){
+      return;
+    }
+    this.setState({
+      maxRange: value
+    });
+  };
 
   render() {
     const checks = this.state.catData.map((d) => {
@@ -117,30 +184,32 @@ class FilterTab extends Component {
       );
     });
 
-
+//TODO replace categories accordion panel to pop-up
 
     return (
       <View style={{flex: 1}}>
-        <View style={styles.inner} onLayout={(ev)=>{this.resizeModal(ev)}}>
-        {/*<ScrollView style={styles.container} >*/}
-          <ExpandablePanel title="Cathegories">
-            {checks}
-          </ExpandablePanel>
+        {/*<View style={styles.inner} onLayout={(ev) => {*/}
+          {/*this.resizeModal(ev)*/}
+        {/*}}>*/}
+          {/*/!*<ScrollView style={styles.container} >*!/*/}
+          {/*<ExpandablePanel title="Cathegories">*/}
+            {/*{checks}*/}
+          {/*</ExpandablePanel>*/}
 
-        {/*</ScrollView>*/}
-        </View>
-
+          {/*/!*</ScrollView>*!/*/}
+        {/*</View>*/}
+        <Button title="Categories" onPress={this.onCatClicked}/>
         {/*<Picker*/}
-          {/*selectedValue={this.state.catMode}*/}
-          {/*style={{height: 50, width: 100}}*/}
-          {/*onValueChange={(itemValue, itemIndex) => this.setState({catMode: itemValue})}>*/}
-          {/*<Picker.Item label="AND" value="and"/>*/}
-          {/*<Picker.Item label="OR" value="or"/>*/}
+        {/*selectedValue={this.state.catMode}*/}
+        {/*style={{height: 50, width: 100}}*/}
+        {/*onValueChange={(itemValue, itemIndex) => this.setState({catMode: itemValue})}>*/}
+        {/*<Picker.Item label="AND" value="and"/>*/}
+        {/*<Picker.Item label="OR" value="or"/>*/}
         {/*</Picker>*/}
 
 
         {/*<View style={styles.checkBoxList}>*/}
-          {/**/}
+        {/**/}
         {/*</View>*/}
         <View style={{flexDirection: "row", alignItems: "center"}}>
           <Text>Price:</Text>
@@ -156,68 +225,71 @@ class FilterTab extends Component {
             <Picker.Item label="<75 Euro" value={75}/>
             <Picker.Item label="<100 Euro" value={100}/>
           </Picker>
-        </View>
-        <View>
-          <Text>Start at:</Text>
-          <DatePicker
-            style={{width: 200}}
-            date={this.state.fromDate}
-            mode="datetime"
-            minDate={this.getCurDateTimeInProprFormat()}
-            format="YYYY-MM-DD HH:mm"
-            androidMode="spinner"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-
-                width: 0,
-                height: 0,
-              },
-              dateInput: {
-                height: 30
-              }
-            }}
-            minuteInterval={10}
-            onDateChange={(datetime) => {
-              this.setState({fromDate: datetime});
-            }}
+          <Text>Max range:</Text>
+          <TextInput
+            style={{width: 100}}
+            placeholder="distance in km"
+            value={this.state.maxRange}
+            onChangeText={this.maxRangeChangeHandler}
           />
-        </View>
-        <View>
-          <Text>Untill:</Text>
-          <DatePicker
-            style={{width: 200}}
-            date={this.getCurDateTimeInProprFormat()}
-            mode="datetime"
-            minDate={this.state.fromDate}
-            format="YYYY-MM-DD HH:mm"
-            androidMode="spinner"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                width: 0,
-                height: 0,
-              },
-              dateInput: {
-                height: 30
-              }
-            }}
-            minuteInterval={10}
-            onDateChange={(datetime) => {
-              this.setState({toDate: datetime});
-            }}
-          />
+          <Text>km</Text>
         </View>
         <View style={{flexDirection: "row"}}>
-          <Text onPress={this.getCurrentPosition} style={{color: "blue"}}>HERE</Text>
-          <Text> or </Text>
-          <Icon size={20} name="map" onPress={()=>{alert("No map yet ;(")}}/>
+          <View>
+            <Text>Start at:</Text>
+            <DatePicker
+              style={{width: 200}}
+              date={this.state.fromDate}
+              mode="datetime"
+              minDate={this.getCurDateTimeInProprFormat()}
+              format="YYYY-MM-DD HH:mm"
+              androidMode="spinner"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+
+                  width: 0,
+                  height: 0,
+                },
+                dateInput: {
+                  height: 30
+                }
+              }}
+              minuteInterval={10}
+              onDateChange={(datetime) => {
+                this.setState({fromDate: datetime});
+              }}
+            />
+          </View>
+          <View>
+            <Text>Untill:</Text>
+            <DatePicker
+              style={{width: 200}}
+              date={this.getCurDateTimeInProprFormat()}
+              mode="datetime"
+              minDate={this.state.fromDate}
+              format="YYYY-MM-DD HH:mm"
+              androidMode="spinner"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  width: 0,
+                  height: 0,
+                },
+                dateInput: {
+                  height: 30
+                }
+              }}
+              minuteInterval={10}
+              onDateChange={(datetime) => {
+                this.setState({toDate: datetime});
+              }}
+            />
+          </View>
         </View>
-        <Text style={{width: "40%"}}>
-          Position:  lat: {this.state.latitude.toFixed(2)} Lon:  {this.state.longitude.toFixed(2)}
-        </Text>
+
         <Button title="Submit" onPress={this.onSubmitPressedHandler}/>
       </View>
     );
@@ -236,17 +308,22 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   container: {
-    flex            : 1,
-    backgroundColor : '#f4f7f9',
-    paddingTop      : 30
+    flex: 1,
+    backgroundColor: '#f4f7f9',
+    paddingTop: 30
   }
 });
 
 
 const mapStateToProps = state => {
   return {
-    baseUrl: state.places.baseUrl
+    baseUrl: state.places.baseUrl,
+    curLocation: state.places.curLocation
   };
 };
-
-export default connect(mapStateToProps)(FilterTab);
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddPlacesToDisplayOnMap: (placesArray) => dispatch(addPlacesToDisplayOnMap(placesArray))
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FilterTab);

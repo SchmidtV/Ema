@@ -11,8 +11,10 @@ import ProfileScreen from "./src/screens/ProfileTab/ProfileTab";
 import SideDrawer from "./src/screens/SideDrawer/SideDrawer";
 import Directions from "./src/screens/DirectionsScreen/DirectionsScreen";
 import startMainTabs from "./src/screens/MainTabs/startMainTabs";
+import CategoriesScreen from "./src/screens/CategoriesScreen";
 import {Provider} from "react-redux";
 import configureStore from "./src/store/configureStore";
+
 
 
 const store = configureStore();
@@ -29,6 +31,7 @@ Navigation.registerComponent("Ema.ProfileScreen", () => ProfileScreen, store, Pr
 Navigation.registerComponent("Ema.PlaceDetailScreen", () => PlaceDetailScreen, store, Provider);
 Navigation.registerComponent("Ema.SideDrawer", () => SideDrawer, store, Provider);
 Navigation.registerComponent("Ema.DirectionsScreen", () => Directions, store, Provider);
+Navigation.registerComponent("Ema.CategoriesScreen", () => CategoriesScreen, store, Provider);
 
 
 startMainTabs();
