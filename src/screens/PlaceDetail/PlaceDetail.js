@@ -58,25 +58,15 @@ class PlaceDetail extends Component {
   };
 
   handleGetDirections = () => {
-    let source;
-    if (this.props.curLocation) {
-      console.log(this.props.curLocation);
-      source = this.props.curLocation;
-    } else {
-      source = {
-        latitude: 52.511326,
-        longitude: 13.458737
-      };
-    }
+    let source = this.props.curLocation;
 
-
-    console.log(this.props.selectedPlace.event_lat);
+    // console.log(this.props.selectedPlace.event_lat);
     const data = {
-      source: source,
       destination: {
-        latitude: parseInt(this.props.selectedPlace.event_lat),
-        longitude: parseInt(this.props.selectedPlace.event_lon)
+        latitude: parseFloat(this.props.selectedPlace.event_lat),
+        longitude: parseFloat(this.props.selectedPlace.event_lon)
       },
+      source: source,
       params: [
         {
           key: "travelmode",
@@ -123,7 +113,7 @@ class PlaceDetail extends Component {
           </View>
 
           {this.renderSound()}
-          <ScrollView style={{height: 190}}>
+          <ScrollView style={{height: 170}}>
             <Text>{this.props.selectedPlace.description}</Text>
           </ScrollView>
 

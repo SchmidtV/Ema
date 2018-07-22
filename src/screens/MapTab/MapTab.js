@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {StyleSheet, Text, View} from "react-native";
-import MapView, {Marker} from 'react-native-maps';
+import {StyleSheet, Text, TouchableHighlight, View} from "react-native";
+import MapView, {Callout, Marker} from 'react-native-maps';
 // import  {Marker} from 'react-native-maps';
 import {connect} from "react-redux";
 import PlaceList from "../../components/PlaceList/PlaceList";
@@ -36,9 +36,23 @@ class MapTab extends Component {
     }
 
   };
+  // componentDidMount() {
+  //   this.mapRef.fitToElements(true);
+  // // this.mapRef.fitToCoordinates(true);
+  // }
 
   renderCurrentLocation = () => {
 
+  };
+
+  markerClick = (event) => {
+      this.props.navigator.push({
+        screen: "Ema.PlaceDetailScreen",
+        title: event.event_title,
+        passProps: {
+          selectedPlace: event
+        }
+      });
   };
 
   renderMarkers = () => {
@@ -57,7 +71,16 @@ class MapTab extends Component {
             title={place.event_name}
             description={place.event_title}
             key={index}
-          />
+            onCalloutPress={this.markerClick.bind(this, place)}
+            >
+            <MapView.Callout tooltip style={styles.customView}>
+              <TouchableHighlight underlayColor='#dddddd'>
+                <View style={styles.calloutText}>
+                  <Text>{place.event_name}{"\n"}{place.event_title}</Text>
+                </View>
+              </TouchableHighlight>
+            </MapView.Callout>
+          </Marker>
         ))
       );
     }
@@ -66,7 +89,22 @@ class MapTab extends Component {
   render() {
     //TODO change to cur loc
     // let curLoc = (this.props.curLocation) ? this.props.curLocation : {latitude: 52.506370, longitude: 13.449382};
-    let curLoc = (this.props.curLocation) ? {latitude: 52.506370, longitude: 13.449382}: {latitude: 52.506370, longitude: 13.449382};
+    let curLoc = (this.props.curLocation) ? {latitude: 52.506370, longitude: 13.449382} : {
+      latitude: 52.506370,
+      longitude: 13.449382
+    };
+
+    // const markers =  this.props.placesArray.map((place, index) =>{
+    //   return(
+    //     {
+    //         latitude: place.event_lat,
+    //         longitude: place.event_lon
+    //       title: place.event_title,
+    //       key:index
+    //     }
+    //   );
+    // });
+
 
     return (
       <View>
@@ -79,7 +117,14 @@ class MapTab extends Component {
               latitudeDelta: 0.015,
               longitudeDelta: 0.0121,
             }}
+            ref={(ref) => { this.mapRef = ref; }}
           >
+            <Marker
+            coordinate={curLoc}
+            title={"You are here"}
+            description={curLoc.latitude +" " +curLoc.longitude}
+            pinColor={'#000000'}
+            />
             {this.renderMarkers()}
           </MapView>
         </View>
@@ -100,6 +145,10 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  customView: {
+    backgroundColor: "white",
+    borderWidth: 1
+  }
 });
 
 const mapStateToProps = state => {
