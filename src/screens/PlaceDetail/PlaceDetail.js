@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, View, StyleSheet} from "react-native";
+import {Image, View, StyleSheet, ScrollView} from "react-native";
 import {Button} from "react-native";
 import {Text} from "react-native";
 import {connect} from "react-redux";
@@ -7,6 +7,7 @@ import {deletePlace} from "../../store/actions/index";
 import WeatherItem from "../../components/WeatherItem";
 import {catData} from "../../components/Cathegories";
 import getDirections from "react-native-google-maps-directions";
+
 class PlaceDetail extends Component {
   constructor(props) {
     super(props);
@@ -28,19 +29,15 @@ class PlaceDetail extends Component {
   };
 
   renderSound = () => {
-    if (this.props.selectedPlace.event_category_id === 1) {
+    if (this.props.selectedPlace.event_category_id === "1") {
       return (
         <Text>
-          Music event!
+          Music event! Soundcloud is coming soon!
         </Text>
       );
 
     }
   };
-
-
-
-
 
 
   directionsHandler = (event) => {
@@ -62,10 +59,10 @@ class PlaceDetail extends Component {
 
   handleGetDirections = () => {
     let source;
-    if (this.props.curLocation){
+    if (this.props.curLocation) {
       console.log(this.props.curLocation);
       source = this.props.curLocation;
-    }else{
+    } else {
       source = {
         latitude: 52.511326,
         longitude: 13.458737
@@ -108,16 +105,33 @@ class PlaceDetail extends Component {
       <View style={styles.container}>
 
         <View>
-          <Image
-            source={imgUrl}
-            style={styles.placeImage}
-            resizeMode="contain"
-          />
           <Text style={styles.placeName}>{this.props.selectedPlace.event_title}</Text>
-          {this.renderSound()}
-          <View style={styles.container}>
-            <Button onPress={this.handleGetDirections} title="Get Directions" />
+          <View style={{flexDirection: "row"}}>
+            <View style={{width: 120}}>
+            <Image
+              source={imgUrl}
+              style={styles.placeImage}
+              resizeMode="contain"
+            />
+            </View>
+            <View style={{flexDirection: "column", marginLeft: 20}}>
+
+            <Text>When: {this.props.selectedPlace.event_date}</Text>
+            <Text>Distance: {this.props.selectedPlace.radius} km</Text>
+              <WeatherItem eventInfo = {this.props.selectedPlace}/>
+            </View>
           </View>
+
+          {this.renderSound()}
+          <ScrollView style={{height: 190}}>
+            <Text>{this.props.selectedPlace.description}</Text>
+          </ScrollView>
+
+          {/*<View style={styles.container}>*/}
+            <Button onPress={this.handleGetDirections} title="Get Directions"/>
+
+          {/*</View>*/}
+          <Button onPress={()=>{}} title="Bookmark"/>
         </View>
       </View>
     );
@@ -131,7 +145,7 @@ const styles = StyleSheet.create({
   },
   placeImage: {
     width: "100%",
-    height: 200
+    height: 120
   },
   placeName: {
     fontWeight: "bold",

@@ -1,11 +1,23 @@
 import React, {Component} from "react";
-import {Button, CheckBox, ListView, Picker, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
+import {
+  Button,
+  CheckBox,
+  FlatList,
+  ListView,
+  Picker,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
+} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import ExpandablePanel from "../../components/ExpandablePanel";
 import {catData} from "../../components/Cathegories";
 import {connect} from "react-redux";
 import DatePicker from "react-native-datepicker";
 import {addPlacesToDisplayOnMap} from "../../store/actions";
+import EventDescriptionSmall from "../../components/EventDescriptionSmall";
 
 class FilterTab extends Component {
   constructor(props) {
@@ -21,23 +33,51 @@ class FilterTab extends Component {
       fromDate: this.getCurDateTimeInProprFormat(),
       toDate: null,
       maxRange: null,
-      events: []
+      events: [],
+      catSelected: 0
     }
   }
 
   changeSelection(id) {
-    console.log(id);
     let state = this.state.catData.map(function (d) {
       return {
         id: d.id,
+        name: d.name,
         selected: (d.id === id ? !d.selected : d.selected)
       };
     });
 
-    this.setState({catData: state});
+    let catSelected = this.state.catSelected;
+    if (state[id - 1].selected) {
+      catSelected += 1;
+    } else {
+      catSelected -= 1;
+    }
+    //
+    // this.state.catData.map( (d) =>{
+    //   if(d.selected){
+    //     catSelected+=1;
+    //   }
+    //   state.push({
+    //     id: d.id,
+    //     name: d.name,
+    //     selected: (d.id === id ? !d.selected : d.selected)
+    //   });
+    // });
+    //
+    // let catSelected = 0;
+    // state.map(cat => {
+    //   if(cat.selected){
+    //     catSelected+=1;
+    //   };
+    // });
+
+    this.setState({
+      catData: state,
+      catSelected: catSelected
+    });
     // console.log(this.state.catData);
   };
-
 
 
   getCurDateTimeInProprFormat() {
@@ -119,7 +159,15 @@ class FilterTab extends Component {
       });
 
   };
-
+  itemSelectHandler = (event) => {
+    this.props.navigator.push({
+      screen: "Ema.PlaceDetailScreen",
+      title: event.event_title,
+      passProps: {
+        selectedPlace: event
+      }
+    });
+  };
 
   onSubmitPressedHandler1 = () => {
     let url = this.props.baseUrl + "events/get_events.php";
@@ -155,13 +203,11 @@ class FilterTab extends Component {
       url = url + "&category=" + catList.toString();
     }
 
-
-
     console.log(url);
   };
 
   maxRangeChangeHandler = (value) => {
-    if(isNaN(value)){
+    if (isNaN(value)) {
       return;
     }
     this.setState({
@@ -169,36 +215,58 @@ class FilterTab extends Component {
     });
   };
 
-  render() {
-    const checks = this.state.catData.map((d) => {
+  renderEvents = () => {
+    if (this.state.events) {
       return (
-        <View key={d.id} style={styles.checkBoxEntity}>
+        <FlatList
+          style={styles.listContainer}
+          data={this.state.events}
+          extraData={this.state}
+          keyExtractor={(item) => item.t_event_id}
+          renderItem={({item}) => (
+            <EventDescriptionSmall
+              eventInfo={item}
+              onItemPressed={() => this.itemSelectHandler(item)}
+            />
 
-          <CheckBox
-            data-id={d.id}
-            value={d.selected}
-            onChange={this.changeSelection.bind(this, d.id)}
-          />
-          <Text>{d.name} </Text>
-        </View>
+          )}
+        />
       );
-    });
+    }
+  };
+
+  render() {
+    // const checks = this.state.catData.map((d) => {
+    //   return (
+    //     <View key={d.id} style={styles.checkBoxEntity}>
+    //       <CheckBox
+    //         data-id={d.id}
+    //         value={d.selected}
+    //         onChange={this.changeSelection.bind(this, d.id)}
+    //       />
+    //       <Text>{d.name} </Text>
+    //     </View>
+    //   );
+    // });
 
 //TODO replace categories accordion panel to pop-up
 
     return (
       <View style={{flex: 1}}>
         {/*<View style={styles.inner} onLayout={(ev) => {*/}
-          {/*this.resizeModal(ev)*/}
+        {/*this.resizeModal(ev)*/}
         {/*}}>*/}
-          {/*/!*<ScrollView style={styles.container} >*!/*/}
-          {/*<ExpandablePanel title="Cathegories">*/}
-            {/*{checks}*/}
-          {/*</ExpandablePanel>*/}
+        {/*/!*<ScrollView style={styles.container} >*!/*/}
+        {/*<ExpandablePanel title="Cathegories">*/}
+        {/*{checks}*/}
+        {/*</ExpandablePanel>*/}
 
-          {/*/!*</ScrollView>*!/*/}
+        {/*/!*</ScrollView>*!/*/}
         {/*</View>*/}
-        <Button title="Categories" onPress={this.onCatClicked}/>
+        <View style={{flexDirection: "row", alignItems: "center", justifyContent: 'space-between',}}>
+          <Text onPress={this.onCatClicked}>Categories: {this.state.catSelected} / 29</Text>
+          <Button title="Categories" onPress={this.onCatClicked}/>
+        </View>
         {/*<Picker*/}
         {/*selectedValue={this.state.catMode}*/}
         {/*style={{height: 50, width: 100}}*/}
@@ -291,6 +359,9 @@ class FilterTab extends Component {
         </View>
 
         <Button title="Submit" onPress={this.onSubmitPressedHandler}/>
+        <View>
+          {this.renderEvents()}
+        </View>
       </View>
     );
   };

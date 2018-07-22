@@ -72,7 +72,7 @@ class WeatherItem extends Component {
 
     if (this.state.temp_min && this.state.temp_max) {
       display.push(
-        <Text key ="temp"> {this.state.temp_min}</Text>
+        <Text key ="temp"> {Math.floor(this.state.temp_min)}°C</Text>
       );
     }
 

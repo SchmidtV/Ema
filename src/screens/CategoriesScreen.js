@@ -6,28 +6,16 @@ import {Text} from "react-native";
 class CategoriesScreen extends Component {
   constructor(props) {
     super(props);
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+
   }
-
-  onNavigatorEvent = event => {
-    if (event.type === "NavBarButtonPress") {
-      if (event.id === "sideDrawerToggle") {
-        this.props.navigator.toggleDrawer({
-          side: "left"
-        })
-      }
-    }
-  };
-
-
 
   handleCheck = (id) =>{
     this.props.changeSelection(id);
   };
 
-  render() {
 
-    const checks = this.props.catData.map((d) => {
+  renderChecks = () =>{
+    return this.props.catData.map((d) => {
       return (
         <View key={d.id} style={styles.checkBoxEntity}>
           <CheckBox
@@ -39,10 +27,12 @@ class CategoriesScreen extends Component {
         </View>
       );
     });
+  };
 
-    return (
+  render() {
+       return (
         <View style={styles.checkBoxList}>
-          {checks}
+          {this.renderChecks()}
         </View>
     );
   }
