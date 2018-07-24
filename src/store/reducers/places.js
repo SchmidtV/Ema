@@ -1,9 +1,11 @@
-import {ADD_PLACE, DELETE_PLACE, ADD_PLACES_TO_DISPLAY_ON_MAP, ADD_CURRENT_LOCATION} from "../actions/actionTypes"
+import {ADD_PLACE, DELETE_PLACE, ADD_PLACES_TO_DISPLAY_ON_MAP, ADD_CURRENT_LOCATION, ADD_TOKEN, REMOVE_TOKEN, ADD_USERNAME, REMOVE_USERNAME} from "../actions/actionTypes"
 
 const initialState = {
   places: [],
   placesArray: [],
-  baseUrl: "http://pc18.beuth-hochschule.de/php/Stud/Rudi/"
+  baseUrl: "http://pc18.beuth-hochschule.de/php/Stud/Rudi/",
+  token: null,
+  username: null
 
 };
 const reducer = (state = initialState, action) => {
@@ -35,6 +37,26 @@ const reducer = (state = initialState, action) => {
     return {
       ...state,
       curLocation: action.curLocation
+    };
+    case ADD_TOKEN:
+    return {
+      ...state,
+      token: action.token
+    };
+    case REMOVE_TOKEN:
+    return {
+      ...state,
+      token: null
+    };
+    case ADD_USERNAME:
+    return {
+      ...state,
+      username: action.username
+    };
+    case REMOVE_USERNAME:
+    return {
+      ...state,
+      username: null
     };
     default:
       return state;

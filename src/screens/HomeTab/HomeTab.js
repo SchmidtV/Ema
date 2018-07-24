@@ -1,7 +1,14 @@
 import React, {Component} from "react";
-import {Button, Text, StyleSheet, View} from "react-native";
+import {Button, Text, StyleSheet, View, AsyncStorage} from "react-native";
 import {connect} from "react-redux";
-import {addPlace, addCurrentLocation, addPlacesToDisplayOnMap} from "../../store/actions";
+import {
+  addPlace,
+  addCurrentLocation,
+  addPlacesToDisplayOnMap,
+  removeToken,
+  addToken,
+  addUsername, removeUsername
+} from "../../store/actions";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import DatePicker from 'react-native-datepicker';
 import EventsList from "../../components/EventsList/EventsList";
@@ -22,6 +29,34 @@ class HomeTab extends Component {
     };
     // this.fetchTopEvents();
     this.getCurrentPosition();
+
+
+  }
+
+  componentWillMount(){
+    let keys = ["token", "username"];
+    AsyncStorage.multiGet(keys, (err, stores) => {
+      // console.log("Token: " + stores[1][1]);
+      // console.log("Username: " + stores[0][1]);
+
+      if(!(stores[0][1] && stores[1][1])){
+        AsyncStorage.multiRemove(keys, (err) => {
+
+        });
+      }else{
+        if(stores[0][0] === "token"){
+          this.props.onAddToken(stores[0][1]);
+          this.props.onAddUsername(stores[1][1]);
+          console.log("Token: " + stores[0][1]);
+          console.log("Username: " + stores[1][1]);
+        }else{
+          this.props.onAddToken(stores[1][1]);
+          this.props.onAddUsername(stores[0][1]);
+          console.log("Token: " + stores[1][1]);
+          console.log("Username: " + stores[0][1]);
+        }
+      }
+    });
   }
 
 
@@ -195,7 +230,9 @@ class HomeTab extends Component {
 
 const mapStateToProps = state => {
   return {
-    places: state.places.places
+    places: state.places.places,
+    token: state.places.token,
+    username: state.places.username
   };
 };
 
@@ -203,7 +240,11 @@ const mapDispatchToProps = dispatch => {
   return {
     onAddPlace: (placeName) => dispatch(addPlace(placeName)),
     onAddPlacesToDisplayOnMap: (placesArray) => dispatch(addPlacesToDisplayOnMap(placesArray)),
-    onAddCurrentLocation: (location) => dispatch(addCurrentLocation(location))
+    onAddCurrentLocation: (location) => dispatch(addCurrentLocation(location)),
+    onAddUsername: (location) => dispatch(addUsername(location)),
+    onRemoveUsername: (location) => dispatch(removeUsername(location)),
+    onAddToken: (location) => dispatch(addToken(location)),
+    onRemoveToken: (location) => dispatch(removeToken(location))
   };
 };
 

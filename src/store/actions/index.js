@@ -1,1 +1,1 @@
-export {addPlace, deletePlace, addPlacesToDisplayOnMap, addCurrentLocation} from "./places"
+export {addPlace, deletePlace, addPlacesToDisplayOnMap, addCurrentLocation, addToken, removeToken, addUsername, removeUsername} from "./places"

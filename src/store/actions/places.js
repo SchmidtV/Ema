@@ -1,4 +1,4 @@
-import {ADD_PLACE, DELETE_PLACE, ADD_PLACES_TO_DISPLAY_ON_MAP, ADD_CURRENT_LOCATION} from "./actionTypes";
+import {ADD_PLACE, DELETE_PLACE, ADD_PLACES_TO_DISPLAY_ON_MAP, ADD_CURRENT_LOCATION, ADD_TOKEN, REMOVE_TOKEN, ADD_USERNAME, REMOVE_USERNAME} from "./actionTypes";
 
 export const addPlace = (placeName) => {
   return {
@@ -25,3 +25,29 @@ export const addCurrentLocation = (location) => {
     curLocation: location
   };
 };
+
+export const addToken = (token) => {
+  return {
+    type: ADD_TOKEN,
+    token: token
+  };
+};
+export const removeToken = () => {
+  return {
+    type: REMOVE_TOKEN
+  };
+};
+
+export const addUsername = (username) => {
+  return {
+    type: ADD_USERNAME,
+    username: username
+  };
+};
+
+export const removeUsername = () => {
+  return {
+    type: REMOVE_USERNAME
+  };
+};
+

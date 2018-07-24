@@ -14,6 +14,8 @@ import startMainTabs from "./src/screens/MainTabs/startMainTabs";
 import CategoriesScreen from "./src/screens/CategoriesScreen";
 import {Provider} from "react-redux";
 import configureStore from "./src/store/configureStore";
+import {AsyncStorage} from "react-native";
+import {addToken, removeToken} from "./src/store/actions";
 
 
 
