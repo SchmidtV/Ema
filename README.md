@@ -208,3 +208,5 @@ Type adb devices  inside command prompt. After typing this command it will show 
 4. Type adb reverse tcp:8081 tcp:8081  in command prompt.
 
 5. Here you go friends, Now your react native application project is ready to run in Real Android Mobile phone. Just GO TO your project’s folder and initiate react-native run-android  command and your project will be automatically run into Real Android Device.
+
+react-native bundle --platform android --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest  android/app/src/main/res/ --dev false
