@@ -51,7 +51,7 @@ class EventsList extends Component {
       url = url + "&category=" + curProps.categories.toString();
     }
 
-    console.log("Fetching events: " + url);
+    // console.log("Fetching events: " + url);
     fetch(url, this)
       .then((response) => {
         return response.json();

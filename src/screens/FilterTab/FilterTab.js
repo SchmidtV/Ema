@@ -359,7 +359,7 @@ class FilterTab extends Component {
         </View>
 
         <Button title="Submit" onPress={this.onSubmitPressedHandler}/>
-        <View>
+        <View style={{alignItems:'center',justifyContent:'center',alignSelf:'stretch',marginBottom:90, paddingBottom: 80}}>
           {this.renderEvents()}
         </View>
       </View>

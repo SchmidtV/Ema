@@ -63,15 +63,8 @@ class AuthScreen extends Component {
   register = () => {
     let username = this._formRef.getValue().username;
     let password = this._formRef.getValue().password;
-    bcrypt.setRandomFallback((len) => {
-      const buf = new Uint8Array(len);
-
-      return buf.map(() => Math.floor(isaac.random() * 256));
-    });
-    let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(password, salt).slice(7, 64);
-
-    // .getValue();
+    let sha256 = require('sha256');
+    let hash = sha256(password);
     let url = this.props.baseUrl + "auth/regist.php?pw=" + hash + "&login="+username;
     console.log(url);
     // let url = this.props.baseUrl + "auth/registr.php";
@@ -84,8 +77,8 @@ class AuthScreen extends Component {
       }
       // ,
       // body: JSON.stringify({
-      //   username: value.username,
-      //   password: value.password,
+      //   username: username,
+      //   password: hash
       // })
     })
       .then((response) => {
@@ -94,6 +87,44 @@ class AuthScreen extends Component {
       .then((myJson) => {
         if(myJson.error.trim() !== ""){
           alert("Could not register!");
+          return (null);
+        }
+        this.props.onAddUsername(username);
+        this.props.onAddToken(myJson.token);
+        this._onValueChange("token", myJson.token);
+        this._onValueChange("username", username);
+        this.props.navigator.pop();
+        // console.log(myJson);
+      });
+  };
+
+
+  login = () => {
+    let username = this._formRef.getValue().username;
+    let password = this._formRef.getValue().password;
+    let sha256 = require('sha256');
+    let hash = sha256(password);
+    let url = this.props.baseUrl + "auth/get_token.php?pw=" + hash + "&login="+username;
+    console.log(url);
+    console.log(username + " : " + hash);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+      // ,
+      // body: JSON.stringify({
+      //   username: username,
+      //   password: hash
+      // })
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((myJson) => {
+        if(myJson.error.trim() !== ""){
+          alert("Could not login!" + myJson.error);
           return (null);
         }
         this.props.onAddUsername(username);
@@ -124,7 +155,7 @@ class AuthScreen extends Component {
             options={options}
           />
         </View>
-        <Button title="Login" onPress={this.loginHandler}/>
+        <Button title="Login" onPress={this.login}/>
         <Button title="Register" onPress={this.register}/>
       </View>
     );

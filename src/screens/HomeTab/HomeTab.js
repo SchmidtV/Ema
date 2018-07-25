@@ -205,9 +205,7 @@ class HomeTab extends Component {
             />
           </View>
         </View>
-        <Text onPress={this.nowPressedHandler}>Now</Text>
-
-        <View>
+        <View style={{alignItems:'center',justifyContent:'center',alignSelf:'stretch',marginBottom:90, paddingBottom: 150}}>
           <Text>Added places</Text>
           <EventsList
             baseUrl={this.state.baseUrl}

@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 0,
     width: "70%",
-    backgroundColor: '#fff',
-    color: '#424242'
+    // backgroundColor: '#fff',
+    // color: '#424242'
   },
   placeButton: {
     width: "30%"
